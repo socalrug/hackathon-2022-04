@@ -7,7 +7,7 @@ output:
 
 ## Event Summary
 
-The SoCal RUG Hackathon 2022-04, hosted by the [Southern California R Users Group](https://socalr.org) and the [UCI Paul Merage School of Business](https://merage.uci.edu) is a two day event where we will "hack" a data set for fun, education, and prizes.  The focus of the event is on education and teamwork, with the main goal of taking a data set from its "raw" form all the way through to a final "product" (e.g. visualization, model, insight).  To frame this process, we will have a light competitive aspect where teams will present their work at end of the event to a panel of judges, with prizes awarded in several categories (see below).
+The SoCal RUG Hackathon 2022-04, hosted by the [Southern California R Users Group](https://www.meetup.com/SOCAL-RUG/) and the [UCI Paul Merage School of Business](https://merage.uci.edu) is a two day event where we will "hack" a data set for fun, education, and prizes.  The focus of the event is on education and teamwork, with the main goal of taking a data set from its "raw" form all the way through to a final "product" (e.g. visualization, model, insight).  To frame this process, we will have a light competitive aspect where teams will present their work at end of the event to a panel of judges, with prizes awarded in several categories (see below).
 
 The event will start with a series of practical educational tutorials to get you started with fundamental data analysis with the R programming language, followed by working sessions where teams will explore and analyze the data set in preparation for the team presentations. Participants will work in small teams (2 - 5 people).  Teams can either be pre-arranged by participants themselves, or will be assigned at the start of the event.  
 
@@ -30,8 +30,9 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 **Where**: University of California, Irvine -- Paul Merage School of Business 
 
 * [Google Maps](https://www.google.com/maps/place/The+Paul+Merage+School+of+Business/@33.6468381,-117.8402619,17z/data=!3m1!4b1!4m5!3m4!1s0x80dcde0edc8d16f9:0x42b754c2a210a0e0!8m2!3d33.6468337!4d-117.8380732)
-* [Directions & Parking Information](https://github.com/socalrug/hackathon-2019-11/blob/master/parking/Parking%20and%20Building%20Location.pdf)
-* Rooms
+* [Directions & Parking Information](https://github.com/socalrug/hackathon-2022-04/blob/master/parking/Parking%20and%20Building%20Location.pdf)
+
+* Rooms (tentative)
     * SB1 2100 - Main event room 
     * SB1 2009 - break out room - meeting room
     * SB1 2011 - break out room - meeting room
@@ -48,7 +49,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 **Registration**
 
 * Cost: $35
-* Register through [EventBright](https://www.eventbrite.com/e/socalrug-data-science-hackathon-tickets-74381718723)
+* Register through [EventBright]()
 
 ## Schedule
 
