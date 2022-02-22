@@ -1,0 +1,10 @@
+#~/bin/bash
+
+if [ -z "$1" ]; then
+    echo "rotate [FILE]"
+    exit 1
+fi
+
+pdftk "$1" cat 1west output out.pdf
+rm "$1"
+mv out.pdf "$1"

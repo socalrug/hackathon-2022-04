@@ -1,0 +1,490 @@
+---
+title: "Exploratory Data Analysis (EDA)"
+author: "Team 2019"
+date: "11/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(rpart)
+library(tidyr)
+library(ggplot2)
+library(caret)
+library(scales)
+library(maptree)
+```
+
+## Exploratory Data Analysis (EDA)
+
+# Carey
+
+## Month of contact
+
+```{r carey1}
+# bank = full data
+bank <- read.csv('data/bank-full.csv', header=TRUE, na.strings = "", sep = ";")
+
+# function to pull p value out from lm model
+lmp <- function (modelobject) {
+  if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
+  f <- summary(modelobject)$fstatistic
+  p <- pf(f[1],f[2],f[3],lower.tail=F)
+  attributes(p) <- NULL
+  return(p)
+}
+
+bank %>%
+  dplyr::select(month) %>%
+  dplyr::mutate(month_num = dplyr::case_when(
+    month == 'jan' ~ 1,
+    month == 'feb' ~ 2,
+    month == 'mar' ~ 3,
+    month == 'apr' ~ 4,
+    month == 'may' ~ 5,
+    month == 'jun' ~ 6,
+    month == 'jul' ~ 7,
+    month == 'aug' ~ 8,
+    month == 'sep' ~ 9,
+    month == 'oct' ~ 10,
+    month == 'nov' ~ 11,
+    month == 'dec' ~ 12)) %>%
+  dplyr::group_by(month_num) %>%
+  dplyr::summarize(count = n()/1000) -> month_count
+
+mod4 <- lm(count ~ month_num, data = month_count)
+
+month_count %>%
+  ggplot(aes(month_num, count)) +
+  geom_bar(stat = "identity") +
+  stat_smooth(method = "lm") +
+  scale_x_continuous(breaks = seq(1,12,1)) +
+  xlab("Month contacted") +
+  ylab("Number of contacts (K)") +
+  labs(title = "Month of contact") +
+  labs(subtitle = paste0("Slope = ", format(mod4$coefficients[["month_num"]], digits = 3), ", P = ", format(lmp(mod4), digits = 3), ", R^2 = ", format(summary(mod4)$r.squared, digits = 3))) +
+  labs(caption = "Contacts increase during summer months.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+
+## Month of contact vs. subscription probability
+
+```{r carey2}
+bank %>%
+  dplyr::select(month, y) %>%
+  dplyr::mutate(month_num = dplyr::case_when(
+    month == 'jan' ~ 1,
+    month == 'feb' ~ 2,
+    month == 'mar' ~ 3,
+    month == 'apr' ~ 4,
+    month == 'may' ~ 5,
+    month == 'jun' ~ 6,
+    month == 'jul' ~ 7,
+    month == 'aug' ~ 8,
+    month == 'sep' ~ 9,
+    month == 'oct' ~ 10,
+    month == 'nov' ~ 11,
+    month == 'dec' ~ 12)) %>%
+  dplyr::mutate(response = y == 'yes') %>%
+  dplyr::group_by(month_num) %>%
+  dplyr::summarize(proportion_yes = sum(response)/n()) -> data_month_prop_yes
+
+mod3 <- lm(proportion_yes ~ month_num, data = data_month_prop_yes)
+
+data_month_prop_yes %>%
+  ggplot(aes(x = month_num, y = proportion_yes)) +
+  geom_point(size = 3) +
+  scale_x_continuous(breaks = seq(1,12,1)) +
+  stat_smooth(method = "lm", size = 1.5) +
+  xlab("Month contacted") +
+  ylab("Probability of subscription") +
+  labs(title = "Effect of month of contact") +
+  labs(subtitle = paste0("Slope = ", format(mod3$coefficients[["month_num"]], digits = 3), ", P = ", format(lmp(mod3), digits = 3), ", R^2 = ", format(summary(mod3)$r.squared, digits = 3))) +
+  labs(caption = "Subscription probability does not depend on month of contact.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+
+## Day of contact
+
+```{r carey3}
+bank %>%
+  dplyr::select(day) %>%
+  dplyr::group_by(day) %>%
+  dplyr::summarize(count = n()/1000) -> day_count
+
+mod2 <- lm(count ~ day, data = day_count)
+
+day_count %>%
+  ggplot(aes(day, count)) +
+  geom_bar(stat = "identity") +
+  stat_smooth(method = "lm") +
+  xlab("Day of month") +
+  ylab("Number of contacts (K)") +
+  labs(title = "Day of month") +
+  labs(subtitle = paste0("Slope = ", format(mod2$coefficients[["day"]], digits = 3), ", P = ", format(lmp(mod2), digits = 3), ", R^2 = ", format(summary(mod2)$r.squared, digits = 3))) +
+  labs(caption = "Number of contacts does not depend on day of month.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+
+## Day of contact vs. subscription probability
+
+```{r carey4}
+bank %>%
+  dplyr::select(day, y) %>%
+  dplyr::mutate(response = y == 'yes') %>%
+  dplyr::group_by(day) %>%
+  dplyr::summarize(proportion_yes = sum(response)/n()) -> data_day_prop_yes
+
+mod1 <- lm(log10(proportion_yes) ~ day, data = data_day_prop_yes)
+
+data_day_prop_yes %>%
+  ggplot(aes(x = day, y = proportion_yes)) +
+  geom_point(size = 3) +
+  scale_y_log10() +
+  stat_smooth(method = "lm", size = 1.5) +
+  xlab("Day of month contacted") +
+  ylab("Probability of subscription") +
+  labs(title = "Effect of day of month") +
+  labs(subtitle = paste0("Slope = ", format(mod1$coefficients[["day"]], digits = 3), ", P = ", format(lmp(mod1), digits = 3), ", R^2 = ", format(summary(mod1)$r.squared, digits = 3))) +
+  labs(caption = "Subscription probability is high at beginning of month.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+
+\pagebreak
+
+# Yu
+
+```{r yu1}
+bank<- read.csv('data/bank-full.csv',header=TRUE,na.strings = "",sep = ";")
+table(bank$y)
+#summary(bank)
+new_bank <- downSample(bank,bank$y,yname = "y")
+#summary(new_bank)
+sample_size = floor(0.75*nrow(new_bank))
+set.seed(123)   # set seed to ensure you always have same random numbers generated
+train_ind = sample(seq_len(nrow(new_bank)),size = sample_size)  # Randomly identifies therows equal to sample size ( defined in previous instruction) from  all the rows of Smarket dataset and stores the row number in train_ind
+train =new_bank[train_ind,] #creates the training dataset with row numbers stored in train_ind
+test=new_bank[-train_ind,]
+```
+
+
+```{r yu2}
+### building rpart decision tree
+dtree <- rpart(y ~ ., data=train, method="class")
+#summary(dtree)
+```
+
+```{r yu3, fig.height=5, fig.width=5,fig.align = "center"}}
+### visualize the tree
+draw.tree(dtree,cex=0.5,)
+```
+
+```{r yu4}
+bank %>%
+  dplyr::select(duration) %>%
+  dplyr::mutate(
+    bins = as.integer(duration / 600) + 1) %>%
+  dplyr::group_by(bins) %>%
+  dplyr::summarize(count = n()) -> bin_count
+
+mod5 <- lm(count ~ bins, data = bin_count)
+
+bin_count %>%
+  ggplot(aes(bins, count)) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  scale_y_log10(limits = c(-1, NA)) +
+  scale_x_continuous(breaks = seq(1,12,1)) +
+  xlab("Duration of contact (10-min bin)") +
+  ylab("Number of contacts") +
+  labs(title = "Duration of contact") +
+  labs(subtitle = paste0("Slope = ", format(mod5$coefficients[["bins"]], digits = 3), ", P = ", format(lmp(mod5), digits = 3), ", R^2 = ", format(summary(mod5)$r.squared, digits = 3))) +
+  labs(caption = "Most calls end within 10 mins but some are longer.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+
+```{r yu5}
+bank %>%
+  dplyr::select(duration, y) %>%
+  dplyr::mutate(
+    bins = as.integer(duration / 600) + 1) -> data_temp
+
+data_temp %>%
+  ggplot(aes(x = bins, fill = y)) +
+  geom_bar(position = "fill") +
+  scale_x_continuous(breaks = seq(1,10,1)) +
+  #stat_smooth(method = "lm", size = 1.5) +
+  xlab("Duration of contact (10-min bins)") +
+  ylab("Probability of subscription") +
+  labs(title = "Effect of duration of contact") +
+  labs(caption = "Subscription probability increases with longer calls.") +
+  theme_classic(base_size = 20) +
+  theme(plot.caption = element_text(hjust = 0.5))
+```
+\pagebreak
+
+#Sarah 
+
+
+```{r}
+data <-read.csv('data/bank-full.csv', header=TRUE, na.strings = "", sep = ";")
+head(data)
+```
+```{r}
+# install.packages("ade4")
+library(ade4)
+```
+
+
+
+
+
+
+```{r}
+data <- data.frame(data)
+```
+
+
+```{r}
+NewColumn <- mutate (data, age_cat = case_when(   age <= 20 ~ "Youth",
+                                                 age <= 40 ~ "Adults",
+                                                 age <= 60 ~ "Senior Adults",
+                                                 age > 60 ~ "Seniors",
+                                                 TRUE ~ "Short"))
+                                      
+```
+
+
+
+
+```{r}
+ggplot(NewColumn, aes(age_cat,y)) +
+geom_bar(stat="identity")
+
+```
+```{r}
+data$age_cat <- factor(NewColumn$age_cat, levels = c('Youth', 'Adults', 'Senior Adults', 'Seniors'))
+ggplot(NewColumn, aes(data$age_cat,y)) +
+geom_bar(stat="identity")
+
+#the data shows that people who are between the age 20 and 60 are more likely to say yes 
+
+```
+
+
+
+```{r}
+ggplot(data, aes(marital,y)) +
+geom_bar(stat="identity")
+# The data shows that people who are married are more likely to say yes
+
+```
+
+
+```{r}
+ggplot(data, aes(loan,y)) +
+geom_bar(stat="identity")
+
+# The data shows that people who don't have personal loan is more likely to say yes 
+```
+
+
+
+
+\pagebreak
+
+# Mike
+
+## Gradient Boosting Machines
+
+```{r split_data}
+bank_data <- read.csv(file="data/bank-full.csv", header=TRUE, sep=";")
+
+set.seed(775)
+
+inTraining <- createDataPartition(bank_data$y, p = .75, list = FALSE)
+
+training <- bank_data[ inTraining,]
+testing  <- bank_data[-inTraining,]
+
+```
+
+``` {r train_and_fit}
+fitControl <- trainControl(method = "repeatedcv",
+                           number = 10,
+                           repeats = 10,
+                           classProbs = TRUE,
+                           summaryFunction = twoClassSummary
+                           )
+
+trained_model <- train(y ~ ., 
+                 data = training, 
+                 method = "gbm", 
+                 trControl = fitControl, 
+                 verbose = FALSE
+)
+```
+
+```{r confusion_matrix}
+
+ggplotConfusionMatrix <- function(m){
+  mytitle <- paste("Accuracy", percent_format()(m$overall[1]),
+                   "Kappa", percent_format()(m$overall[2]))
+  p <-
+    ggplot(data = as.data.frame(m$table) ,
+           aes(x = Reference, y = Prediction)) +
+    geom_tile(aes(fill = log(Freq)), colour = "white") +
+    scale_fill_gradient(low = "white", high = "steelblue") +
+    geom_text(aes(x = Reference, y = Prediction, label = Freq)) +
+    theme(legend.position = "none") +
+    ggtitle(mytitle)
+  return(p)
+}
+
+(cm <- confusionMatrix(predict(trained_model, testing), testing$y))
+
+ggplotConfusionMatrix(cm)
+
+fourfoldplot(cm$table, conf.level = 0, margin = 1, main = "Confusion Matrix")
+
+```
+
+```{r xichen logistic}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(caret)
+bank<- read.csv('data/bank-full.csv',header=TRUE,na.strings = "",sep = ";")
+table(bank$y)
+#summary(bank)
+new_bank <- downSample(bank,bank$y,yname = "y")
+#summary(new_bank)
+data <- new_bank %>% mutate_at(c("age","balance","day","duration","campaign","pdays","previous"),scale)
+#summary(data)
+sample_size = floor(0.75*nrow(data))
+set.seed(123)   # set seed to ensure you always have same random numbers generated
+train_ind = sample(seq_len(nrow(data)),size = sample_size)  # Randomly identifies therows equal to sample size ( defined in previous instruction) from  all the rows of Smarket dataset and stores the row number in train_ind
+train =new_bank[train_ind,] #creates the training dataset with row numbers stored in train_ind
+test=new_bank[-train_ind,] 
+## logistic regression based on 10-fold cross-validation 
+trainControl <- trainControl(
+  method = "cv",
+  number = 10,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+fit <- train(
+  form = y ~.,  
+  data = train,
+  trControl = trainControl,
+  method = "glm", 
+  family = "binomial", 
+  metric = "ROC"
+)
+
+## AUC ROC for training data
+#print(fit)
+## AUC ROC for test data
+## See https://topepo.github.io/caret/measuring-performance.html#measures-for-class-probabilities
+predictTest <- data.frame(
+  obs = test$y,                                    ## observed class labels
+  predict(fit, newdata = test, type = "prob"),         ## predicted class probabilities
+  pred = predict(fit, newdata = test, type = "raw")    ## predicted class labels
+) 
+
+#twoClassSummary(data = predictTest, lev = levels(predictTest$obs))
+library(MLmetrics)
+prSummary(data = predictTest,lev = levels(predictTest$obs))
+```
+```{r xichen feature importance}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(caret)
+library(xgboost)
+library(readr)
+library(stringr)
+library(Matrix)
+library(data.table)
+data<- read.csv('data/bank-full.csv',header=TRUE,na.strings = "",sep = ";")
+data$y <- recode(data$y,'yes'=1, 'no'=0)
+data$y <- as.integer(data$y)
+features = colnames(data)
+
+for (f in features){
+  if( (class(data[[f]]) == "character") || (class(data[[f]]) == "factor"))
+  {
+    levels = unique(data[[f]])
+    data[[f]] = factor(data[[f]], level = levels)
+  }
+}
+
+# one-hot-encoding features
+data = as.data.frame(data)
+ohe_feats = c('job', 'marital', 'education', 'default', 'housing', 'loan','contact', 'month','poutcome')
+dummies = dummyVars(~ job+marital+education+default+housing+loan+contact+month+poutcome , data = data)
+df_all_ohe <- as.data.frame(predict(dummies, newdata = data))
+df_all_combined <- cbind(data[,-c(which(colnames(data) %in% ohe_feats))],df_all_ohe)
+
+data = as.data.table(df_all_combined)
+
+sample_size = floor(0.75*nrow(data))
+set.seed(123)   # set seed to ensure you always have same random numbers generated
+train_ind = sample(seq_len(nrow(data)),size = sample_size)  # Randomly identifies therows equal to sample size ( defined in previous instruction) from  all the rows of Smarket dataset and stores the row number in train_ind
+train =data[train_ind,] #creates the training dataset with row numbers stored in train_ind
+test =data[-train_ind,] 
+y_train <- train[!is.na(y),y]
+y_test <- test[!is.na(y),y]
+train = train[,y:=NULL]
+test = test[,y:=NULL]
+train_sparse <- data.matrix(train)
+test_sparse <- data.matrix(test)
+dtrain <- xgb.DMatrix(data=train_sparse, label=y_train)
+dtest <- xgb.DMatrix(data=test_sparse, label = y_test)
+
+# Params for xgboost
+param <- list(booster = "gbtree",
+              eval_metric = "auc", 
+              objective = "binary:logistic",
+              eta = .1,
+              gamma = 1,
+              max_depth = 4,
+              min_child_weight = 1,
+              subsample = .7,
+              colsample_bytree = .7,
+              scale_pos_weight = 7)
+xgb.fit=xgb.train(
+  params=param,
+  data=dtrain,
+  nrounds=100,
+  nthreads=1,
+  early_stopping_rounds=10,
+  watchlist=list(val1=dtrain,val2=dtest),
+  verbose=0
+)
+
+# Review the final model and results
+xgb.fit
+test <- as.matrix(test)
+xgb.pred = predict(xgb.fit,test,reshape=T)
+xgb.pred = as.data.frame(xgb.pred)
+xgb.pred$prediction <- as.numeric(xgb.pred > 0.95)
+#xgb.pred$prediction = apply(xgb.pred,1,function(x) colnames(xgb.pred)[which.max(x)])
+xgb.pred$label = as.factor(y_test)
+result = sum(xgb.pred$prediction==xgb.pred$label)/nrow(xgb.pred)
+print(paste("Final Accuracy =",sprintf("%1.2f%%", 100*result)))
+importance_matrix <- xgb.importance(colnames(dtrain), model = xgb.fit)
+
+xgb.plot.importance(importance_matrix, rel_to_first = TRUE, xlab = "Relative importance",top_n = 5)
+#library(Ckmeans.1d.dp)
+#gg <- xgb.ggplot.importance(importance_matrix, measure = "Frequency", rel_to_first = FALSE, top_n=6)
+#gg
+```

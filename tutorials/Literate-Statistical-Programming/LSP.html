@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Literate Statistical Programming</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="John Peach" />
+    <meta name="date" content="2019-11-09" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="intro.css" type="text/css" />
+    <link rel="stylesheet" href="LSP.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Literate Statistical Programming
+## OCRUG Hackathon - 2019-11
+### John Peach
+### 2019-11-09
+
+---
+
+
+
+
+# Collaboration Challenges
+
+.large[
+* Data in different locations
+* Control changes - audit / tracking
+* Mechanisms to prevent data loss
+* What is the most recent version?
+* Sharing work
+* Manage parallel workflows
+]
+
+---
+
+# What is Literate Programming
+
+.large[
+* A single stream of human-readable text and machine-readable code
+* **Weave** the stream to get the documentation
+* **Tangle** the stream to get the code
+]
+
+---
+
+# Literate Programming Example
+
+.large[
+
+```r
+#' Mean value
+#'
+#' Determine mean value of a vector
+#'
+#' @param x numeric vector of values
+#' @examples
+#' myMean &lt;- Mean(1:10)
+Mean &lt;- function(x) {
+  sum(x)/length(x)
+}
+```
+]
+
+---
+# What is Literate Stats Programming?
+
+.large[
+* It is Literate Programming applied to stat's problems
+* RMarkdown is a common tool
+]
+
+---
+
+# Literate Stat Programming Example
+
+![t-test.png](t-test.png)
+
+
+
+.large[
+Output:
+
+The test show that the p-value was 0.000278196.
+]
+
+---
+
+# Literate Stat Programming Example
+
+&lt;textarea rows="20" cols="80"&gt;
+---&amp;#13;&amp;#10;title: "Long-term Effects of Amblyopia on Functional Properties of Thalamocortical Axons in Binocular V1"&amp;#13;&amp;#10;author: "Carey Y. L. Huh, Diyue (Ivy) Gu, &amp; John P. Peach"&amp;#13;&amp;#10;date: '`r Sys.Date()`'&amp;#13;&amp;#10;output: pdf_document&amp;#13;&amp;#10;---&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r setup, include = FALSE}&amp;#13;&amp;#10;knitr::opts_chunk$set(echo = FALSE)&amp;#13;&amp;#10;knitr::opts_chunk$set(cache = TRUE)&amp;#13;&amp;#10;knitr::opts_chunk$set(cache.lazy = TRUE)&amp;#13;&amp;#10;library(fieldAxonAnalysis)&amp;#13;&amp;#10;library(tidyverse)&amp;#13;&amp;#10;library(rPacu)&amp;#13;&amp;#10;library(car)&amp;#13;&amp;#10;library(magrittr)&amp;#13;&amp;#10;library(boot)&amp;#13;&amp;#10;library(ggpubr)&amp;#13;&amp;#10;library(Rmisc)&amp;#13;&amp;#10;library(lme4)&amp;#13;&amp;#10;library(nlme)&amp;#13;&amp;#10;library(lmerTest)&amp;#13;&amp;#10;library(lmtest)&amp;#13;&amp;#10;library(lemon)&amp;#13;&amp;#10;library(multcomp)&amp;#13;&amp;#10;&amp;#13;&amp;#10;dir.create(file.path('report_csv_files'), showWarnings = FALSE)&amp;#13;&amp;#10;dir.create(file.path('report_figures'), showWarnings = FALSE)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r read_files, echo = FALSE, warning = FALSE}&amp;#13;&amp;#10;p_cutoff &lt;- 0.01&amp;#13;&amp;#10;rPacu::driver(&amp;#13;&amp;#10;  file = system.file('config', 'axon-data.csv', package = 'fieldAxonAnalysis'),&amp;#13;&amp;#10;  path = system.file('extdata', package = 'fieldAxonAnalysis')&amp;#13;&amp;#10;) %&gt;%&amp;#13;&amp;#10;  rPacu::sf_peak(p_cutoff = p_cutoff) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(field_id = paste(mouse_id, session_id, fov_id, sep = "_")) %&gt;%&amp;#13;&amp;#10;  dplyr::select(mouse_id, field_id, recording_id, cell_id, SF, variable, value) %&gt;%&amp;#13;&amp;#10;  dplyr::distinct() -&gt; data_tidy&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r read_dLGN_cell_count_file, echo = FALSE, warning = FALSE}&amp;#13;&amp;#10;path &lt;- system.file('extdata', package = 'fieldAxonAnalysis')&amp;#13;&amp;#10;read_csv(file = file.path(path, "dLGN_cell_count.csv")) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(mouse_id = as.character(mouse_id)) -&gt; dLGN_cell_count&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;# Experimental Animals and Other Considerations&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Normal (control)&amp;#13;&amp;#10;&amp;#13;&amp;#10;5 mice, 17 fields of view in binocular V1 (bV1)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Mouse 078 (Wt, F, P101), Mouse 096 (VGLUT2-Cre, F, P106), Mouse 197 (VGLUT2-Cre, M, P99), Mouse 253 (VGLUT2-Cre, F, P111), Mouse 273 (VGLUT2-Cre, F, P100)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Mouse 078 and 096: normally reared, Mouse 197, 253 and 273: littermate control to amblyopes (weaned at P19, co-housed with amb)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Depth (mean +/- SD): 144 +/- 40 microns&amp;#13;&amp;#10;&amp;#13;&amp;#10;24% Anterior bV1, 76% Middle bV1&amp;#13;&amp;#10;&amp;#13;&amp;#10;All data analyzed using pacu-v2, summed projection images&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Amblyopic (MD)&amp;#13;&amp;#10;&amp;#13;&amp;#10;6 mice, 17 fields of view in bV1&amp;#13;&amp;#10;&amp;#13;&amp;#10;Mouse 098 (Wt, M, P132), Mouse 154 (Wt, F, P107), Mouse 194 (VGLUT2-Cre, M, P93), Mouse 195 (VGLUT2-Cre, M, P99), Mouse 243 (VGLUT2-Cre, M, P115), Mouse 270 (VGLUT2-Cre, M, P100)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Mouse 098, 154, 194, 195, 243 and 270 were monocularly deprived in Left Eye between P19 and P33&amp;#13;&amp;#10;&amp;#13;&amp;#10;Depth (mean +/- SD): 124 +/- 31 microns&amp;#13;&amp;#10;&amp;#13;&amp;#10;13% Anterior bV1, 87% Middle bV1&amp;#13;&amp;#10;&amp;#13;&amp;#10;All data analyzed using pacu-v2, summed projection images&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Included Data&amp;#13;&amp;#10;&amp;#13;&amp;#10;Data was filtered such that only boutons with ANOVA Each p value of less than `r p_cutoff` at their peak SF was used.&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Excluded Data&amp;#13;&amp;#10;&amp;#13;&amp;#10;Not included: data for boutons with SF_peak of 0. Only recordings with contralateral-eye or ipsilateral-eye as viewing eye were included. Recordings with both eyes open were not included in analysis at this time. Recordings from posterior bV1 not included at this time.&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Nomenclature&amp;#13;&amp;#10;&amp;#13;&amp;#10;Eye_manipulation: Control vs. MD (14-day MD since P19)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Eye_group: Binocular vs. Monocular (in some cases, Monocular is further specified as Contra-only or Ipsi-only)&amp;#13;&amp;#10;&amp;#13;&amp;#10;Eye_type: Contra vs. Ipsi (contralateral-eye vs. ipsilateral-eye response)&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;# Summary of Sample Size&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_data, echo = FALSE, warning = FALSE}&amp;#13;&amp;#10;data_tidy %&gt;% &amp;#13;&amp;#10;  tidyr::spread(key = variable, value = value) %&gt;%&amp;#13;&amp;#10;  dplyr::select(eye_manipulation, mouse_id, field_id, cell_id, eye_type, RMax) %&gt;%&amp;#13;&amp;#10;  dplyr::filter(eye_type != 'both') %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(RMax = as.numeric(RMax)) %&gt;%&amp;#13;&amp;#10;  reshape2::melt(id.vars = c('eye_manipulation', 'mouse_id', 'field_id', 'cell_id', 'eye_type')) %&gt;%&amp;#13;&amp;#10;  #na.omit() %&gt;%&amp;#13;&amp;#10;  tidyr::spread(key = eye_type, value = value) %&gt;%&amp;#13;&amp;#10;  dplyr::select(-c(variable)) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(mouse_id, field_id, cell_id) %&gt;%&amp;#13;&amp;#10;  summarise_all(funs(na.omit(.)[1])) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(eye_group = dplyr::case_when(&amp;#13;&amp;#10;                  is.na(contra) ~ 'Ipsi_Only',&amp;#13;&amp;#10;                  is.na(ipsi) ~ 'Contra_Only',&amp;#13;&amp;#10;                  TRUE ~ 'Binocular'),&amp;#13;&amp;#10;                ODI = dplyr::case_when(&amp;#13;&amp;#10;                  eye_group == 'Ipsi_Only' ~ as.numeric(-1),&amp;#13;&amp;#10;                  eye_group == 'Contra_Only' ~ as.numeric(1),&amp;#13;&amp;#10;                  eye_group == 'Binocular' ~ (contra - ipsi) / (contra + ipsi))&amp;#13;&amp;#10;                ) %&gt;%&amp;#13;&amp;#10;  dplyr::select(mouse_id, field_id, cell_id, eye_manipulation, eye_group, ODI) -&gt; odi_data&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Summary of Sample Size, by Field&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r sample_size_summary_by_field, warning = FALSE}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    Ipsi_Only = ODI == -1,&amp;#13;&amp;#10;    Binocular = ODI &gt; -1 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    Contra_Only = ODI == 1) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, field_id) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    Ipsi_Only = sum(Ipsi_Only),&amp;#13;&amp;#10;    Binocular = sum(Binocular),&amp;#13;&amp;#10;    Contra_Only = sum(Contra_Only)) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(Total_Count = Ipsi_Only + Binocular + Contra_Only) %&gt;%&amp;#13;&amp;#10;  knitr::kable()&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Summary of Sample Size, by Animal&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r sample_size_summary_by_animal, warning = FALSE}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    Ipsi_Only = ODI == -1,&amp;#13;&amp;#10;    Binocular = ODI &gt; -1 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    Contra_Only = ODI == 1) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, mouse_id) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    Ipsi_Only = sum(Ipsi_Only),&amp;#13;&amp;#10;    Binocular = sum(Binocular),&amp;#13;&amp;#10;    Contra_Only = sum(Contra_Only)) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(Total_Count = Ipsi_Only + Binocular + Contra_Only) %&gt;%&amp;#13;&amp;#10;  knitr::kable()&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Summary of Sample Size&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r sample_size_summary, warning = FALSE}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    Ipsi_Only = ODI == -1,&amp;#13;&amp;#10;    Binocular = ODI &gt; -1 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    Contra_Only = ODI == 1) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    Ipsi_Only = sum(Ipsi_Only),&amp;#13;&amp;#10;    Binocular = sum(Binocular),&amp;#13;&amp;#10;    Contra_Only = sum(Contra_Only)) %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(Total_Count = Ipsi_Only + Binocular + Contra_Only) %&gt;%&amp;#13;&amp;#10;  knitr::kable()&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;# ODI&amp;#13;&amp;#10;&amp;#13;&amp;#10;ODI is calculated by computing from RMax values: (contra - ipsi) / (contra + ipsi)&amp;#13;&amp;#10;&amp;#13;&amp;#10;### All Sample, Binned Histogram of Percent of Ocular Dominance Index (ODI)&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_hist_all_sample, warning = FALSE, fig.width = 6, fig.height = 5}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    bin_01 = ODI == -1,&amp;#13;&amp;#10;    bin_02 = ODI &gt; -1 &amp; ODI &lt; -0.6,&amp;#13;&amp;#10;    bin_03 = ODI &gt;= -0.6 &amp; ODI &lt; -0.2,&amp;#13;&amp;#10;    bin_04 = ODI &gt;= -0.2 &amp; ODI &lt; +0.2,&amp;#13;&amp;#10;    bin_05 = ODI &gt;= +0.2 &amp; ODI &lt; +0.6,&amp;#13;&amp;#10;    bin_06 = ODI &gt;= +0.6 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    bin_07 = ODI == 1&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    bin_01 = sum(bin_01) / n() * 100,&amp;#13;&amp;#10;    bin_02 = sum(bin_02) / n() * 100,&amp;#13;&amp;#10;    bin_03 = sum(bin_03) / n() * 100,&amp;#13;&amp;#10;    bin_04 = sum(bin_04) / n() * 100,&amp;#13;&amp;#10;    bin_05 = sum(bin_05) / n() * 100,&amp;#13;&amp;#10;    bin_06 = sum(bin_06) / n() * 100,&amp;#13;&amp;#10;    bin_07 = sum(bin_07) / n() * 100&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  reshape2::melt(id.vars = "eye_manipulation") %&gt;%&amp;#13;&amp;#10;  dplyr::rename(odi_bin = variable, percent = value) -&gt; odi_hist_all_sample&amp;#13;&amp;#10;&amp;#13;&amp;#10;y_max_value &lt;- 1.1 * max(odi_hist_all_sample$percent)&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_all_sample %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = odi_bin, y = percent)) +&amp;#13;&amp;#10;  scale_x_discrete(labels = c('-1', '-0.8', '-0.4', '0', '0.4', '0.8', '1')) +&amp;#13;&amp;#10;  xlab("Ocular Dominance Index") +&amp;#13;&amp;#10;  ylab("Percent of Boutons, All Sample") +&amp;#13;&amp;#10;  geom_bar(color = "black", stat = "identity", width = 0.7) +&amp;#13;&amp;#10;  facet_wrap(~eye_manipulation, nrow = 2, scales = "free_x", strip.position = "right") +&amp;#13;&amp;#10;  scale_y_continuous(expand = c(0, 0), limits = c(0, y_max_value)) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"))&amp;#13;&amp;#10;rm(y_max_value)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;### Binned Histogram of Ocular Dominance Index (ODI), Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_odi_hist_all_sample_bin_only, warning = FALSE, fig.width = 5.5, fig.height = 4.5}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::filter(eye_group == "Binocular") -&gt; odi_data_bin_only&amp;#13;&amp;#10;odi_data_bin_only %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    bin_01 = ODI == -1,&amp;#13;&amp;#10;    bin_02 = ODI &gt; -1 &amp; ODI &lt; -0.6,&amp;#13;&amp;#10;    bin_03 = ODI &gt;= -0.6 &amp; ODI &lt; -0.2,&amp;#13;&amp;#10;    bin_04 = ODI &gt;= -0.2 &amp; ODI &lt; +0.2,&amp;#13;&amp;#10;    bin_05 = ODI &gt;= +0.2 &amp; ODI &lt; +0.6,&amp;#13;&amp;#10;    bin_06 = ODI &gt;= +0.6 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    bin_07 = ODI == 1&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    bin_01 = sum(bin_01) / n() * 100,&amp;#13;&amp;#10;    bin_02 = sum(bin_02) / n() * 100,&amp;#13;&amp;#10;    bin_03 = sum(bin_03) / n() * 100,&amp;#13;&amp;#10;    bin_04 = sum(bin_04) / n() * 100,&amp;#13;&amp;#10;    bin_05 = sum(bin_05) / n() * 100,&amp;#13;&amp;#10;    bin_06 = sum(bin_06) / n() * 100,&amp;#13;&amp;#10;    bin_07 = sum(bin_07) / n() * 100&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  reshape2::melt(id.vars = c("eye_manipulation")) %&gt;%&amp;#13;&amp;#10;  dplyr::rename(odi_bin = variable, percent = value) -&gt; odi_hist_all_sample_bin_only&amp;#13;&amp;#10;&amp;#13;&amp;#10;y_max_value = 1.1 * max(odi_hist_all_sample_bin_only$percent)&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_all_sample_bin_only %&gt;%&amp;#13;&amp;#10;  #dplyr::mutate(odi_bin = as.numeric(odi_bin)) %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = odi_bin, y = percent, fill = eye_manipulation)) +&amp;#13;&amp;#10;  scale_x_discrete(labels = c('-1', '-0.8', '-0.4', '0', '0.4', '0.8', '1')) +&amp;#13;&amp;#10;  xlab("Ocular Dominance Index") +&amp;#13;&amp;#10;  ylab("% Binocular Boutons") +&amp;#13;&amp;#10;  #geom_errorbar(aes(ymin = Mean - SEM, ymax = Mean + SEM), width = 0.3, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  geom_bar(stat = "identity", width = 0.7, color = "black", show.legend = F, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  #facet_rep_wrap(~eye_manipulation, nrow = 1, scales = "free_x", strip.position = "top") +&amp;#13;&amp;#10;  scale_fill_manual(values = c("blue", "red")) +&amp;#13;&amp;#10;  scale_y_continuous(expand = c(0, 0), limits = c(0, y_max_value)) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"), axis.ticks = element_line(color = "black"), panel.border = element_rect(fill = NA, colour = NA)) +&amp;#13;&amp;#10;  theme(strip.text.x = element_text(size = 20, color = "black")) +&amp;#13;&amp;#10;  theme(strip.background = element_rect(colour = NA, fill = NA))&amp;#13;&amp;#10;&amp;#13;&amp;#10;ggsave("report_figures/odi_hist_all_sample_bin_only.svg")&amp;#13;&amp;#10;rm(y_max_value)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;### Summary of Binned Histogram of Ocular Dominance Index (ODI), Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_hist_all_sample_bin_only_summary, warning = FALSE}&amp;#13;&amp;#10;odi_hist_all_sample_bin_only %&gt;%&amp;#13;&amp;#10;  dplyr::select(odi_bin, eye_manipulation, percent) %&gt;%&amp;#13;&amp;#10;  knitr::kable()&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;### By Field, Binned Histogram of Ocular Dominance Index (ODI), Mean +/- SEM&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_hist_by_field, warning = FALSE, fig.width = 6, fig.height = 5}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    bin_01 = ODI == -1,&amp;#13;&amp;#10;    bin_02 = ODI &gt; -1 &amp; ODI &lt; -0.6,&amp;#13;&amp;#10;    bin_03 = ODI &gt;= -0.6 &amp; ODI &lt; -0.2,&amp;#13;&amp;#10;    bin_04 = ODI &gt;= -0.2 &amp; ODI &lt; +0.2,&amp;#13;&amp;#10;    bin_05 = ODI &gt;= +0.2 &amp; ODI &lt; +0.6,&amp;#13;&amp;#10;    bin_06 = ODI &gt;= +0.6 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    bin_07 = ODI == 1&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, field_id) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    bin_01 = sum(bin_01) / n() * 100,&amp;#13;&amp;#10;    bin_02 = sum(bin_02) / n() * 100,&amp;#13;&amp;#10;    bin_03 = sum(bin_03) / n() * 100,&amp;#13;&amp;#10;    bin_04 = sum(bin_04) / n() * 100,&amp;#13;&amp;#10;    bin_05 = sum(bin_05) / n() * 100,&amp;#13;&amp;#10;    bin_06 = sum(bin_06) / n() * 100,&amp;#13;&amp;#10;    bin_07 = sum(bin_07) / n() * 100&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  reshape2::melt(id.vars = c("eye_manipulation", "field_id")) %&gt;%&amp;#13;&amp;#10;  dplyr::rename(odi_bin = variable, percent = value) -&gt; odi_hist_by_field&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_by_field %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, odi_bin) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(Mean = mean(percent), SEM = sd(percent)/sqrt(n())) -&gt; odi_hist_by_field_summary&amp;#13;&amp;#10;&amp;#13;&amp;#10;y_max_value &lt;- 1.1 * max(odi_hist_by_field_summary$Mean + odi_hist_by_field_summary$SEM)&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_by_field_summary %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = odi_bin, y = Mean)) +&amp;#13;&amp;#10;  scale_x_discrete(labels = c('-1', '-0.8', '-0.4', '0', '0.4', '0.8', '1')) +&amp;#13;&amp;#10;  xlab("Ocular Dominance Index") +&amp;#13;&amp;#10;  ylab("Percent of Boutons, by Field") +&amp;#13;&amp;#10;  geom_errorbar(aes(ymin = Mean - SEM, ymax = Mean + SEM), width = 0.3) +&amp;#13;&amp;#10;  geom_bar(color = "black", stat = "identity", width = 0.7) +&amp;#13;&amp;#10;  facet_wrap(~eye_manipulation, nrow = 2, scales = "free_x", strip.position = "right") +&amp;#13;&amp;#10;  scale_y_continuous(expand = c(0, 0), limits = c(0, y_max_value)) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"))&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;### By Field, Binned Histogram of Ocular Dominance Index (ODI), Mean +/- SEM&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_odi_hist_by_field, warning = FALSE, fig.width = 8, fig.height = 3.5}&amp;#13;&amp;#10;&amp;#13;&amp;#10;# TODO: fix +1 business!&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_by_field_summary %&gt;%&amp;#13;&amp;#10;  #dplyr::mutate(odi_bin = as.numeric(odi_bin)) %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = odi_bin, y = Mean+1, fill = eye_manipulation)) +&amp;#13;&amp;#10;  scale_x_discrete(labels = c('-1', '-0.8', '-0.4', '0', '0.4', '0.8', '1')) +&amp;#13;&amp;#10;  xlab("Ocular Dominance Index") +&amp;#13;&amp;#10;  ylab("% Boutons") +&amp;#13;&amp;#10;  geom_errorbar(aes(ymin = Mean+1 - SEM, ymax = Mean+1 + SEM), width = 0.3, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  geom_bar(stat = "identity", width = 0.7, color = "black", show.legend = F, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  facet_rep_wrap(~eye_manipulation, nrow = 1, scales = "free_x", strip.position = "top") +&amp;#13;&amp;#10;  scale_fill_manual(values = c("blue", "red")) +&amp;#13;&amp;#10;  scale_y_continuous(expand = c(0, 0), limits = c(0, y_max_value)) +&amp;#13;&amp;#10;  #scale_y_log10(breaks = c(1, 2, 4, 8, 16, 32, 64)) +&amp;#13;&amp;#10;  #scale_y_log10() +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"), axis.ticks = element_line(color = "black"), panel.border = element_rect(fill = NA, colour = NA)) +&amp;#13;&amp;#10;  theme(strip.text.x = element_text(size = 20, color = "black")) +&amp;#13;&amp;#10;  theme(strip.background = element_rect(colour = NA, fill = NA))&amp;#13;&amp;#10;&amp;#13;&amp;#10;ggsave("report_figures/odi_hist_by_field.svg")&amp;#13;&amp;#10;rm(y_max_value)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;### Binocular Only, By Field, Binned Histogram of Ocular Dominance Index (ODI), Mean +/- SEM&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_odi_hist_by_field_bin_only, warning = FALSE, fig.width = 5.5, fig.height = 4.5}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::filter(eye_group == "Binocular") -&gt; odi_data_bin_only&amp;#13;&amp;#10;odi_data_bin_only %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    bin_01 = ODI == -1,&amp;#13;&amp;#10;    bin_02 = ODI &gt; -1 &amp; ODI &lt; -0.6,&amp;#13;&amp;#10;    bin_03 = ODI &gt;= -0.6 &amp; ODI &lt; -0.2,&amp;#13;&amp;#10;    bin_04 = ODI &gt;= -0.2 &amp; ODI &lt; +0.2,&amp;#13;&amp;#10;    bin_05 = ODI &gt;= +0.2 &amp; ODI &lt; +0.6,&amp;#13;&amp;#10;    bin_06 = ODI &gt;= +0.6 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    bin_07 = ODI == 1&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, field_id) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    bin_01 = sum(bin_01) / n() * 100,&amp;#13;&amp;#10;    bin_02 = sum(bin_02) / n() * 100,&amp;#13;&amp;#10;    bin_03 = sum(bin_03) / n() * 100,&amp;#13;&amp;#10;    bin_04 = sum(bin_04) / n() * 100,&amp;#13;&amp;#10;    bin_05 = sum(bin_05) / n() * 100,&amp;#13;&amp;#10;    bin_06 = sum(bin_06) / n() * 100,&amp;#13;&amp;#10;    bin_07 = sum(bin_07) / n() * 100&amp;#13;&amp;#10;  ) %&gt;%&amp;#13;&amp;#10;  reshape2::melt(id.vars = c("eye_manipulation", "field_id")) %&gt;%&amp;#13;&amp;#10;  dplyr::rename(odi_bin = variable, percent = value) -&gt; odi_hist_by_field_bin_only&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_by_field_bin_only %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation, odi_bin) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(Mean = mean(percent), SEM = sd(percent)/sqrt(n())) -&gt; odi_hist_by_field_bin_only_summary&amp;#13;&amp;#10;&amp;#13;&amp;#10;y_max_value = 1.1 * max(odi_hist_by_field_bin_only_summary$Mean + odi_hist_by_field_bin_only_summary$SEM)&amp;#13;&amp;#10;&amp;#13;&amp;#10;odi_hist_by_field_bin_only_summary %&gt;%&amp;#13;&amp;#10;  #dplyr::mutate(odi_bin = as.numeric(odi_bin)) %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = odi_bin, y = Mean, fill = eye_manipulation)) +&amp;#13;&amp;#10;  scale_x_discrete(labels = c('-1', '-0.8', '-0.4', '0', '0.4', '0.8', '1')) +&amp;#13;&amp;#10;  xlab("Ocular Dominance Index") +&amp;#13;&amp;#10;  ylab("% Binocular Boutons") +&amp;#13;&amp;#10;  geom_errorbar(aes(ymin = Mean - SEM, ymax = Mean + SEM), width = 0.3, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  geom_bar(stat = "identity", width = 0.7, color = "black", show.legend = F, position = position_dodge(0.9)) +&amp;#13;&amp;#10;  #facet_rep_wrap(~eye_manipulation, nrow = 1, scales = "free_x", strip.position = "top") +&amp;#13;&amp;#10;  scale_fill_manual(values = c("blue", "red")) +&amp;#13;&amp;#10;  scale_y_continuous(expand = c(0, 0), limits = c(0, y_max_value)) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"), axis.ticks = element_line(color = "black"), panel.border = element_rect(fill = NA, colour = NA)) +&amp;#13;&amp;#10;  theme(strip.text.x = element_text(size = 20, color = "black")) +&amp;#13;&amp;#10;  theme(strip.background = element_rect(colour = NA, fill = NA))&amp;#13;&amp;#10;&amp;#13;&amp;#10;ggsave("report_figures/odi_hist_by_field_bin_only.svg")&amp;#13;&amp;#10;rm(y_max_value)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;### Binocular Only, ODI Cumulative Histogram&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_odi_ecdf_bin_only, warning = FALSE, fig.width = 6, fig.height = 4}&amp;#13;&amp;#10;odi_data_bin_only %&gt;%&amp;#13;&amp;#10;  ggplot(aes(ODI, colour = eye_manipulation, width = 1)) + &amp;#13;&amp;#10;  stat_ecdf(size = 1.25) +&amp;#13;&amp;#10;  labs(title = "", x = "Ocular Dominance Index", y = "Fraction of Binocular Boutons") +&amp;#13;&amp;#10;  scale_color_manual(values = c("blue", "red")) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  scale_x_continuous(breaks = seq(-1, 1, 0.5), limits = c(-1, 1)) +&amp;#13;&amp;#10;  theme(axis.text = element_text(color = "black"), axis.ticks = element_line(color = "black"), panel.border = element_rect(fill = NA, colour = NA)) +&amp;#13;&amp;#10;  theme(strip.text.x = element_text(size = 20, color = "black")) +&amp;#13;&amp;#10;  theme(strip.background = element_rect(colour = NA, fill = NA)) +&amp;#13;&amp;#10;  theme(legend.title = element_blank()) &amp;#13;&amp;#10;&amp;#13;&amp;#10;ggsave("report_figures/odi_cumul_dist_bin_only.svg")&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### K-S Test to Compare ODI, Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r ks_odi_bin_only, warning=FALSE}&amp;#13;&amp;#10;ks &lt;- ks.test(dplyr::filter(odi_data_bin_only, eye_manipulation == "control")$ODI,&amp;#13;&amp;#10;              dplyr::filter(odi_data_bin_only, eye_manipulation == "MD")$ODI)&amp;#13;&amp;#10;print(ks)&amp;#13;&amp;#10;rm(ks)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;### Violin + Boxplot of ODI, Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_odi_viobox_bin_only, warning = FALSE, fig.width = 3, fig.height = 4.5}&amp;#13;&amp;#10;odi_data_bin_only %&gt;%&amp;#13;&amp;#10;  ggplot(aes(x = eye_manipulation, y = ODI, fill = eye_manipulation)) +&amp;#13;&amp;#10;  geom_violin(width = 0.7, position = position_dodge(width = 0.9), color = "black") +&amp;#13;&amp;#10;  geom_boxplot(position = position_dodge(width = 0.9), alpha = 0, color = "black", size = 0.7) +&amp;#13;&amp;#10;  xlab("") +&amp;#13;&amp;#10;  ylab("ODI of Binocular Boutons") +&amp;#13;&amp;#10;  scale_y_continuous(breaks = seq(-1, 1, 0.5), limits = c(-1, 1.2)) +&amp;#13;&amp;#10;  scale_fill_manual(values = c("blue", "red")) +&amp;#13;&amp;#10;  theme_classic(base_size = 20) +&amp;#13;&amp;#10;  theme(panel.spacing = unit(0, "lines"), &amp;#13;&amp;#10;        strip.background = element_blank(),&amp;#13;&amp;#10;        strip.placement = "outside", &amp;#13;&amp;#10;        axis.text = element_text(color = "black"), axis.ticks = element_line(color = "black")) + &amp;#13;&amp;#10;  theme(legend.position = "none")&amp;#13;&amp;#10;&amp;#13;&amp;#10;ggsave("report_figures/odi_viobox_bin_only.svg")&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Wilcoxon Rank Sum Test to Compare Median ODI, Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_test_bin_only, warning = FALSE}&amp;#13;&amp;#10;compare_means(ODI ~ eye_manipulation, data = odi_data_bin_only, method = "wilcox.test", p.adjust.method = "none")&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;#### Mixed Effects Model of ODI, Binocular Only&amp;#13;&amp;#10;&amp;#13;&amp;#10;Fixed effect(s): eye_manipulation&amp;#13;&amp;#10;&amp;#13;&amp;#10;Random effect(s): mouse_id&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r odi_lmer_bin_only, warning = FALSE}&amp;#13;&amp;#10;model_lmer = lmerTest::lmer(ODI ~ eye_manipulation + (1 | mouse_id), data = odi_data_bin_only, REML = FALSE)&amp;#13;&amp;#10;print(anova(model_lmer))&amp;#13;&amp;#10;rm(model_lmer)&amp;#13;&amp;#10;```&amp;#13;&amp;#10;&amp;#13;&amp;#10;\pagebreak&amp;#13;&amp;#10;&amp;#13;&amp;#10;# Eye_group Percent Barplot (3 groups)&amp;#13;&amp;#10;&amp;#13;&amp;#10;```{r fig_eyegroup_barplot, warning = FALSE, fig.width = 5, fig.height = 4}&amp;#13;&amp;#10;odi_data %&gt;%&amp;#13;&amp;#10;  dplyr::mutate(&amp;#13;&amp;#10;    Ipsi_Only = ODI == -1,&amp;#13;&amp;#10;    Binocular = ODI &gt; -1 &amp; ODI &lt; +1,&amp;#13;&amp;#10;    Contra_Only = ODI == 1) %&gt;%&amp;#13;&amp;#10;  dplyr::group_by(eye_manipulation) %&gt;%&amp;#13;&amp;#10;  dplyr::summarise(&amp;#13;&amp;#10;    Ipsi_Only = sum(Ipsi_Only) / n() * 100,&amp;#13;&amp;#10;    Binocular = sum(Binocular) / n() * 100,&amp;#13;&amp;#10;    Contra_Only = sum(Contra_Only) / n() * 100) %&gt;% &amp;#13;&amp;#10;  reshape2::melt(id.vars = "eye_manipulation") %&gt;%&amp;#13;&amp;#10;  dplyr::rename(eye_group = variable, percent = value) -&gt; eyegroup_percent_all_sample
+&lt;/textarea&gt;
+
+---
+
+# Differences between LP and LSP
+
+.large[
+* Literate Programming: 
+     * code is primary
+     * documentation is optional
+* Literate Statistical Programming: 
+    * communicating the analysis is primary
+    * computer code is required, but secondary
+]
+---
+
+# What are the end products
+
+.large[
+* Written report
+    * Consultant Style
+    * Institutional Memory Style
+* Model
+    * That can be put into production
+    * Model is **not** decoupled from the analysis
+* Do **not** save the output, save the pipeline
+]
+
+---
+
+# Consultant Style
+
+.large[
+* Consists of the following components
+    1. Introduction to the problem
+    1. Planned approach
+    1. Data management
+    1. Descriptive statistics
+    1. Inferential statistics
+    1. Conclusions
+* Think; journal article, report to clients
+* No code in the text
+]
+
+---
+
+# Institutional Memory Style
+
+.large[
+* Focus is on documenting a research program
+* Often multi-authored
+* Not a clear definition of "done"
+* Many interrelated analysis
+* Think; book of knowledge
+]
+
+---
+
+# Model Workflow
+
+.large[
+* Main output is a production model
+* Scripts, data and models do **not** live in different states
+* Model is tied to the analysis workflow
+* Improvement process is easier
+]
+
+---
+
+# Key Issues 
+
+.large[
+1. The Fragmentation Problem
+1. Non-linear Workflow
+1. Rework of Analysis
+1. Pipe-lining activities
+1. Learning curve
+]
+
+---
+
+# The Fragmentation Problem
+
+.large[
+* Saving all state together
+* Unless they are coupled you never know the true state
+]
+
+---
+
+# Non-linear Workflow
+
+.large[
+* Have a 'master' branch for accepted work
+* Do work in branches
+]
+
+---
+
+# Rework of Analysis
+
+.large[
+* Analysis is never done just once
+* Analysis grows as understanding increases
+* As data is collected/excluded, the analysis is re-run and expanded
+* Code is a **live regression test**
+]
+
+---
+
+
+# Pipe-lining Activities
+
+.large[
+* Pipeline what is reasonable
+* Use caching mechanisms
+* Premature optimization is wasteful
+* Strive for **no copy-and-pasting**
+* Data cleaning/validation is expensive
+* Do statistics/ML in the same place you do data exploration, cleaning and tidying
+]
+
+---
+
+# Learning curve
+
+.large[
+* Resistance to learning new tools
+]
+    
+---
+
+# LSP Solution
+
+.large[
+* Create Markdown documents for each analysis
+* RMarkdown supports R and python
+* Save the code not the output
+* Version control all aspects
+    * A central trunk for the main product
+    * Use branching for WIP and testing
+]
+
+---
+
+# LSP Solution
+
+.large[
+* Write report/slides as analysis is done
+* Use flexible standardizations
+    * Use code for standardization
+    * All data **in** files
+* Build an analysis pipeline
+    * With changes, run the pipeline on the trunk
+    * Strive for a one step process
+    * Dynamically create values (no hard coding)
+]
+
+---
+
+# Demo
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,240 @@
+
+---
+title: "Bank Analysis"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(radiant)
+library(tidyverse)
+library(devtools)
+install_github("thomasp85/patchwork")
+library(ggplot2)
+library(patchwork)
+install.packages("caTools")
+library(caTools)
+library(randomForest)
+install.packages("reticulate")
+library(reticulate)
+
+```
+
+
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn
+from scipy.stats import logistic
+```
+
+
+
+
+```{python}
+bank_full_iteration_1 = pd.read_csv('bank-full.csv', delimiter = ';')
+```
+
+
+
+
+
+
+
+```{python}
+bank_full_iteration_1['duration_log'] = np.log(1+bank_full_iteration_1['duration'])
+bank_full_iteration_1['contacted_1_to_4'] = ['1-4 times' if (val >=1 and val <= 4) else 'too many times' for val in bank_full_iteration_1['campaign']]
+bank_full_iteration_1['previously_contacted'] = np.array(['yes' if val > 0 else 'no' for val in bank_full_iteration_1['pdays']])
+
+
+```
+
+
+
+
+
+
+
+
+
+```{r}
+my_data <- read.table(file = "bank-full.csv", sep = ";", header=TRUE)
+new_data <- read.csv(file = "bank_full_iteration_3.csv", header=TRUE)
+my_data_1 <- read.csv(file = "bank_full_iteration_9.csv", header=TRUE)
+
+```
+
+
+
+
+
+
+```{r}
+#number of yes with education
+t<-new_data %>%
+  count(y) 
+
+t <-  ggplot(data = t, aes(x = y , y=n )) + geom_bar(stat="identity") + labs(y = "Count " , x = "Client Response" , title = " Client Response Distribution ")  
+print(t)
+```
+
+
+
+
+
+```{r}
+#number of yes with education
+t<-new_data %>%
+  mutate(y, Y = ifelse( y == "no" , 0,1)) %>%
+  group_by(education) %>%
+  ggplot(aes(x=y,fill=education)) + geom_bar(position = "dodge")  + labs(y = "Count of clients" , x = "Client Response" , title = " Client Education Distribution ")  
+print(t)
+```
+
+
+
+
+
+```{r}
+#number of yes with respect to age
+t<-new_data %>%
+  mutate(y, Y = ifelse( y == "no",0,1)) %>%
+  group_by(age_bin_pd_cut) %>%
+  summarise( Yes = sum(Y)) %>%
+  ggplot(aes(x=age_bin_pd_cut,y=Yes)) + geom_bar(stat = "identity") + labs(y = "Count of clients" , x = "Age intervals" , title = " Client Age Distribution ")  
+
+print(t)
+
+```
+
+
+
+
+```{r}
+#write.csv(my_data,"new_updated_4.csv", row.names = FALSE)
+
+# Logistic regression on iteration 9 
+
+result <- logistic(
+  my_data_1, 
+  rvar = "y", 
+  evar = c(
+    "age", "job", "marital", "education", "default", "balance", 
+    "housing", "loan", "contact", "day", "duration_log", "contacted_1_to_4", 
+    "previously_contacted"
+  ), 
+  lev = "no", 
+  data_filter = "X1 < 36000"
+)
+summary(result)
+pred <- predict(result, pred_data = my_data_1)
+print(pred, n = 10)
+my_data_1 <- store(my_data_1, pred, name = "pred_logit")
+```
+
+
+
+
+
+
+```{r}
+result <- confusion(
+  my_data_1, 
+  pred = "pred_logit", 
+  rvar = "y", 
+  lev = "no", 
+  train = "Both", 
+  data_filter = "X1 < 36000"
+)
+summary(result)
+```
+
+
+
+
+```{r}
+
+adwait = read.csv('bank-full.csv',sep = ';')
+
+for(level in unique(adwait$job)){
+  adwait[paste("job", level, sep = "_")] <- ifelse(adwait$job == level, 1, 0)
+}
+
+for(level in unique(adwait$marital)){
+  adwait[paste("marital", level, sep = "_")] <- ifelse(adwait$marital == level, 1, 0)
+}
+
+for(level in unique(adwait$education)){
+  adwait[paste("education", level, sep = "_")] <- ifelse(adwait$education == level, 1, 0)
+}
+
+
+adwait$housing_yes <- ifelse(adwait$housing == "yes", 1, 0)
+adwait$poutcome_success <- ifelse(adwait$poutcome == "success", 1, 0)
+adwait$poutcome_failure <- ifelse(adwait$poutcome == "failure", 1, 0)
+adwait$poutcome_unknown <- ifelse(adwait$poutcome == "unknown", 1, 0)
+
+for(level in unique(adwait$month)){
+  adwait[paste("month", level, sep = "_")] <- ifelse(adwait$month == level, 1, 0)
+}
+
+colnames(adwait)[21] <- "job_blue_collar"
+colnames(adwait)[24] <- "job_admin"
+colnames(adwait)[26] <- "job_self_employeed"
+
+adwait$education = NULL
+adwait$job = NULL
+adwait$marital = NULL
+adwait$month = NULL
+adwait$default = NULL
+adwait$loan = NULL
+
+
+adwait$poutcome = NULL
+adwait$poutcome_unknown = NULL
+
+head(adwait)
+
+set.seed(1234)
+s = sample.split(adwait$y,SplitRatio = 0.85)
+
+train1 = subset(adwait,subset = s == T)
+test1 =  subset(adwait,subset = s == F)
+
+rf <- randomForest(y~.,data = train1)
+
+p1 <- predict(rf,test1)
+
+out<-as.data.frame(table('predicted' = p1,'actual' = test1$y))
+lab <- c("TN","FP","FN","TP")
+
+out <- cbind(out,lab)
+out
+
+Accuracy <- out$Freq[which("TP" == lab)]+ out$Freq[which("TN" == lab)]  / ( out$Freq[which("TP" == lab)] + out$Freq[which("TN" == lab)] ) + out$Freq[which("FP" == lab)] + out$Freq[which("FP" == lab)] 
+
+Precision <- out$Freq[which("TP" == lab)] / out$Freq[which("TP" == lab)] +  out$Freq[which("FP" == lab)] 
+
+Recall <- out$Freq[which("TP" == lab)] / out$Freq[which("TP" == lab)] + out$Freq[which("FN" == lab)]
+
+print("Accuracy:")
+print(Accuracy)
+
+print("Precision:")
+print(Precision)
+
+print("Recall:")
+print(Recall)
+
+varImpPlot(rf)
+
+```
+
+
+
+
+
+
+

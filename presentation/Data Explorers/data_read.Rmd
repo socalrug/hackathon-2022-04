@@ -1,0 +1,387 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+bank<-read.csv("bank-full.csv",header=T,sep=";")
+summary(bank)
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(data=bank, aes(bank$day)) + 
+  geom_histogram(breaks=seq(0, 35, by = 2),
+                  col="#7D4427", 
+                 fill="#AEBD38") + 
+  labs(title="Histogram for Day") +
+  labs(x="Day", y="Count") 
+```
+
+```{r}
+ggplot(bank, aes(day, fill = y)) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data=bank, aes(bank$duration)) + 
+  geom_histogram(breaks=seq(0, 3000, by = 200),
+                  col="#7D4427", 
+                 fill="#AEBD38") + 
+  labs(title="Histogram for Duration") +
+  labs(x="Last contacted duration", y="Count") 
+```
+
+
+```{r}
+ggplot(bank, aes(month, fill = y)) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data=bank, aes(bank$campaign)) + 
+  geom_histogram(breaks=seq(0, 60, by = 1),
+                  col="#7D4427", 
+                 fill="#AEBD38") + 
+  labs(title="Histogram for Campaign") +
+  labs(x="# of time person was contacted during the campaign", y="Count") 
+```
+
+```{r}
+library(corrplot)
+nums <- unlist(lapply(bank, is.numeric)) 
+
+numeric_bank <- bank[ , nums]
+numeric_bank$y <- as.numeric(bank$y)
+
+corr_matrix <- cor(numeric_bank)
+
+# with circles
+corrplot(corr_matrix,
+         method = 'number',
+         type = "lower")
+```
+
+```{r}
+library(gridExtra)
+
+p1 <- ggplot(aes(x=balance),data=bank) + geom_histogram()
+p2 <- p1 +scale_x_log10()
+p3 <- p2 +scale_x_sqrt()
+
+grid.arrange(p1,p2,p3,ncol=1)
+rm(p1,p2,p3)
+```
+
+```{r}
+qplot(x=campaign, y=previous, data=bank,
+      color = y,
+      shape = y,
+      xlab = "# of contacts in this campaign",
+      ylab = "# of contacts in previous campaign"
+      ) 
+```
+
+```{r}
+bank <- bank[!(bank$previous>200),]
+
+qplot(x=campaign, y=previous, data=bank,
+      color = y,
+      shape = y,
+      xlab = "# of contacts in this campaign",
+      ylab = "# of contacts in previous campaign"
+      )
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+
+
+bank <- bank %>% 
+        mutate(new_target = ifelse(campaign > 0 & pdays==-1 ,"Yes","No")) %>%
+        mutate(loyal_customers = ifelse(previous < 10 & pdays!=-1,"Yes","No"))
+```
+
+
+```{r}
+library(caret)
+
+target <- bank$y
+bank$y <- NULL
+
+dmy <- dummyVars(" ~ .", data = bank)
+transformed_data <- data.frame(predict(dmy, newdata = bank))
+
+#since the duration is left skewed. We need to transform the make it 
+transformed_data$normalized_age <- sqrt(transformed_data$age)
+transformed_data$age <- NULL
+
+transformed_data$normalized_duration <- log(1+transformed_data$duration)
+transformed_data$duration <-NULL
+
+transformed_data$target <- target
+```
+
+
+```{r}
+library(h2o)
+h2o.init(strict_version_check = FALSE)
+```
+
+```{r}
+
+#write.table(transformed_data,file="transformed_data.csv",sep=",",row.names = FALSE)
+response <- "target"
+predictors <- setdiff(names(transformed_data) , "target")
+
+df <- h2o.importFile(path = "transformed_data.csv")
+
+splits <- h2o.splitFrame(
+  data = df,
+  ratios = c(0.6,0.2),   ## only need to specify 2 fractions, the 3rd is implied
+  destination_frames = c("train.hex", "valid.hex", "test.hex"), seed = 1234
+)
+
+```
+
+
+```{r}
+train <- splits[[1]]
+valid <- splits[[2]]
+test  <- splits[[3]]
+
+gbm <- h2o.gbm(x = predictors, y = response, training_frame = train)
+## Show a detailed model summary
+#gbm
+## Get the AUC on the validation set
+h2o.auc(h2o.performance(gbm, newdata = valid))
+```
+
+
+```{r}
+hyper_params = list( max_depth = seq(1,29,2) )
+#hyper_params = list( max_depth = c(4,6,8,12,16,20) ) ##faster for larger datasets
+grid <- h2o.grid(
+  ## hyper parameters
+  hyper_params = hyper_params,
+  ## full Cartesian hyper-parameter search
+  search_criteria = list(strategy = "Cartesian"),
+  ## which algorithm to run
+  algorithm="gbm",
+  ## identifier for the grid, to later retrieve it
+  grid_id="depth_grid",
+  ## standard model parameters
+  x = predictors,
+  y = response,
+  training_frame = train,
+  validation_frame = valid,
+  ## more trees is better if the learning rate is small enough
+  ## here, use "more than enough" trees - we have early stopping
+  ntrees = 10000,
+  ## smaller learning rate is better
+  ## since we have learning_rate_annealing, we can afford to start with a bigger learning rate
+  learn_rate = 0.05,
+  ## learning rate annealing: learning_rate shrinks by 1% after every tree
+  ## (use 1.00 to disable, but then lower the learning_rate)
+  learn_rate_annealing = 0.99,
+  ## sample 80% of rows per tree
+  sample_rate = 0.8,
+  ## sample 80% of columns per split
+  col_sample_rate = 0.8,
+  ## fix a random number generator seed for reproducibility
+  seed = 1234,
+  ## early stopping once the validation AUC doesn't improve by at least 0.01% for 5 consecutive scoring events
+  stopping_rounds = 5,
+  stopping_tolerance = 1e-4,
+  stopping_metric = "AUC",
+  ## score every 10 trees to make early stopping reproducible (it depends on the scoring interval)
+  score_tree_interval = 10
+)
+## by default, display the grid search results sorted by increasing logloss (since this is a classification task)
+#grid
+## sort the grid models by decreasing AUC
+sortedGrid <- h2o.getGrid("depth_grid", sort_by="auc", decreasing = TRUE)
+sortedGrid
+## find the range of max_depth for the top 5 models
+topDepths = sortedGrid@summary_table$max_depth[1:5]
+minDepth = min(as.numeric(topDepths))
+maxDepth = max(as.numeric(topDepths))
+```
+
+
+```{r}
+hyper_params = list(
+  ## restrict the search to the range of max_depth established above
+  max_depth = seq(minDepth,maxDepth,1),
+  ## search a large space of row sampling rates per tree
+  sample_rate = seq(0.2,1,0.05),
+  ## search a large space of column sampling rates per split
+  col_sample_rate = seq(0.2,1,0.05),
+  ## search a large space of column sampling rates per tree
+  col_sample_rate_per_tree = seq(0.2,1,0.05),
+  ## search a large space of how column sampling per split should change as a function of the depth of the split
+  col_sample_rate_change_per_level = seq(0.9,1.1,0.05),
+  ## search a large space of the number of min rows in a terminal node
+  min_rows = 2^seq(0,log2(nrow(train))-1,1),
+  ## search a large space of the number of bins for split-finding for continuous and integer columns
+  nbins = 2^seq(4,10,1),
+  ## search a large space of the number of bins for split-finding for categorical columns
+  nbins_cats = 2^seq(4,12,1),
+  ## search a few minimum required relative error improvement thresholds for a split to happen
+  min_split_improvement = c(0,1e-8,1e-6,1e-4),
+  ## try all histogram types (QuantilesGlobal and RoundRobin are good for numeric columns with outliers)
+  histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin")
+)
+search_criteria = list(
+  ## Random grid search
+  strategy = "RandomDiscrete",
+  ## limit the runtime to 60 minutes
+  max_runtime_secs = 3600,
+  ## build no more than 100 models
+  max_models = 20,
+  ## random number generator seed to make sampling of parameter combinations reproducible
+  seed = 1234,
+  ## early stopping once the leaderboard of the top 5 models is converged to 0.1% relative difference
+  stopping_rounds = 5,
+  stopping_metric = "AUC",
+  stopping_tolerance = 1e-3
+)
+grid <- h2o.grid(
+  ## hyper parameters
+  hyper_params = hyper_params,
+  ## hyper-parameter search configuration (see above)
+  search_criteria = search_criteria,
+  ## which algorithm to run
+  algorithm = "gbm",
+  ## identifier for the grid, to later retrieve it
+  grid_id = "final_grid",
+  ## standard model parameters
+  x = predictors,
+  y = response,
+  training_frame = train,
+  validation_frame = valid,
+  ## more trees is better if the learning rate is small enough
+  ## use "more than enough" trees - we have early stopping
+  ntrees = 1000,
+  ## smaller learning rate is better
+  ## since we have learning_rate_annealing, we can afford to start with a bigger learning rate
+  learn_rate = 0.05,
+  ## learning rate annealing: learning_rate shrinks by 1% after every tree
+  ## (use 1.00 to disable, but then lower the learning_rate)
+  learn_rate_annealing = 0.99,
+  ## early stopping based on timeout (no model should take more than 1 hour - modify as needed)
+  max_runtime_secs = 3600,
+  ## early stopping once the validation AUC doesn't improve by at least 0.01% for 5 consecutive scoring events
+  stopping_rounds = 5, stopping_tolerance = 1e-4, stopping_metric = "AUC",
+  ## score every 10 trees to make early stopping reproducible (it depends on the scoring interval)
+  score_tree_interval = 10,
+  ## base random number generator seed for each model (automatically gets incremented internally for each model)
+  seed = 1234
+)
+## Sort the grid models by AUC
+sortedGrid <- h2o.getGrid("final_grid", sort_by = "auc", decreasing = TRUE)
+
+```
+
+```{r}
+for (i in 1:5) {
+  gbm <- h2o.getModel(sortedGrid@model_ids[[i]])
+  print(h2o.auc(h2o.performance(gbm, valid = TRUE)))
+}
+```
+
+```{r}
+gbm <- h2o.getModel(sortedGrid@model_ids[[1]])
+print(h2o.auc(h2o.performance(gbm, newdata = test)))
+```
+
+```{r}
+model <- do.call(h2o.gbm,
+        ## update parameters in place
+        {
+          p <- gbm@parameters
+          p$model_id = NULL          ## do not overwrite the original grid model
+          p$training_frame = df      ## use the full dataset
+          p$validation_frame = NULL  ## no validation frame
+          p$nfolds = 5               ## cross-validation
+          p
+        }
+)
+
+```
+
+```{r}
+print(h2o.auc(h2o.performance(model, newdata = test)))
+```
+
+
+```{r}
+hyper_params <- list(
+  activation=c("Rectifier","Tanh","Maxout","RectifierWithDropout","TanhWithDropout","MaxoutWithDropout"),
+  hidden=list(c(200,200,200),c(500,500,500),c(300,300,300),c(250,250,250,250)),
+  input_dropout_ratio=c(0,0.05),
+  l1=seq(0,1e-4,1e-6),
+  l2=seq(0,1e-4,1e-6)
+)
+hyper_params
+
+## Stop once the top 5 models are within 1% of each other (i.e., the windowed average varies less than 1%)
+search_criteria = list(strategy = "RandomDiscrete", max_runtime_secs = 360, max_models = 100, seed=1234567, stopping_rounds=5, stopping_tolerance=1e-2)
+dl_random_grid <- h2o.grid(
+  algorithm="deeplearning",
+  grid_id = "dl_grid_random",
+  training_frame=train,
+  validation_frame=valid, 
+  x=predictors, 
+  y=response,
+  epochs=1,
+  stopping_metric="AUC",
+  stopping_tolerance=1e-2,        ## stop when logloss does not improve by >=1% for 2 scoring events
+  stopping_rounds=2,
+  score_validation_samples=10000, ## downsample validation set for faster scoring
+  score_duty_cycle=0.025,         ## don't score more than 2.5% of the wall time
+  max_w2=10,                      ## can help improve stability for Rectifier
+  hyper_params = hyper_params,
+  search_criteria = search_criteria
+) 
+```
+
+```{r}
+grid <- h2o.getGrid("dl_grid_random",sort_by="auc",decreasing=TRUE)
+
+best_model <- h2o.getModel(grid@model_ids[[1]]) ## model with lowest logloss
+print(h2o.auc(h2o.performance(best_model, newdata = test)))
+```
+
+```{r}
+library(h2oEnsemble) 
+
+learner <- c("h2o.glm.wrapper", "h2o.randomForest.wrapper", 
+             "h2o.gbm.wrapper", "h2o.deeplearning.wrapper")
+metalearner <- "h2o.glm.wrapper"
+
+fit <- h2o.ensemble(x = predictors, y = response, 
+                    training_frame = train,
+                    family = "binomial", 
+                    learner = learner, 
+                    metalearner = metalearner,
+                    cvControl = list(V = 5))
+```
+
+```{r}
+perf <- h2o.ensemble_performance(fit, newdata = test)
+perf
+```
+
+```{r}
+
+```
+
