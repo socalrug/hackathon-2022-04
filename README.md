@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-# SoCal RUG Hackathon 2019-11
+# SoCal RUG Hackathon 2022-04
 
 ## Event Summary
 
@@ -60,12 +60,12 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | 08:30 AM            | Registration starts |
 | 08:30 AM - 09:00 AM | Breakfast |
 | 09:00 AM - 09:15 AM | Introduction and wifi setup |
-| 09:15 AM – 10:00 AM | Tutorial - Data manipulation with tidy tools - Arlo |
-| 10:00 AM - 10:45 AM | Tutorial - Data visualization with ggplot2 - Emil |
+| 09:15 AM – 10:00 AM | Tutorial - TDB |
+| 10:00 AM - 10:45 AM | Tutorial - TDB |
 | 10:45 AM - 11:00 AM | Break |
-| 11:00 AM - 11:45 AM | Tutorial - Data modelling with caret - Ryan |
-| 11:45 AM - 12:15 PM | Tutorial - Literate Statistical Programming - John |
-| 12:15 PM - 12:45 PM | Tutorial - How to Promote Yourself in Today's Data Science Job Market - Zhi |
+| 11:00 AM - 11:45 AM | Tutorial - TBD |
+| 11:45 AM - 12:15 PM | Tutorial - TBD |
+| 12:15 PM - 12:45 PM | Tutorial - TBD |
 | 01:00 PM – 01:30 PM | Lunch |
 | 01:30 PM            | Registration closes |
 | 01:30 PM – 02:00 PM | Welcome talk, data set overview, groups formed |
@@ -80,11 +80,9 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | Time | Event |
 | :--- | :--   |
 | 08:30 AM - 09:00 AM | Breakfast | 
-| 09:00 AM            | Most Helpful Person Award voting opens |
 | 09:00 AM – 12:00 PM | Working session |
 | 12:00 PM – 12:45 PM | Lunch  |
 | 12:45 PM – 01:30 PM | Groups prepare presentations |
-| 01:30 PM            | Voting for Most Helpful Person Award closes |
 | 01:30 PM – 03:00 PM | Group presentations |
 | 03:00 PM – 03:30 PM | Judges deliberate; Complete event survey |
 | 03:30 PM – 04:00 PM | Award presentation & wrap-up |
@@ -93,7 +91,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 ## Rules
 
 * All participants must [register for the event](https://www.eventbrite.com/e/socalrug-data-science-hackathon-tickets-274506294717) and have a valid ticket to attend.
-* All participants must abide by the [SoCal RUG Code of Conduct](https://github.com/socalrug/hackathon-2019-11/blob/master/code-of-conduct.md), including the [R Consortium and the R Community Code of Conduct](https://wiki.r-consortium.org/view/R_Consortium_and_the_R_Community_Code_of_Conduct).
+* All participants must abide by the [SoCal RUG Code of Conduct](https://github.com/socalrug/hackathon-2022-04/blob/master/code-of-conduct.md), including the [R Consortium and the R Community Code of Conduct](https://wiki.r-consortium.org/view/R_Consortium_and_the_R_Community_Code_of_Conduct).
 * Participants are free to come and go during the event. However, any participant who has not checked-in, in person, by 01:00 PM on Saturday will be considered a "no-show" and their spot may be given to someone else.
 * Though this is an R focused event, participants are free to use any programming language or tool for their work.
 * Participants are free to work on their projects both onsite at the Hackathon and offsite, though we highly encourage participants to attend all working sessions to maximize team and group interactions.
@@ -133,7 +131,7 @@ Once you have an account, sign in (you can do it on a web browser or download an
 
 Slack channel: [https://socalrug.slack.com](https://socalrug.slack.com)
 
-The channel for the hackathon is **hackathon-2019-11**
+The channel for the hackathon is **hackathon-2022-04**
 
 ## Teams
 
@@ -145,7 +143,7 @@ The channel for the hackathon is **hackathon-2019-11**
 
 ## Award Categories and Prizes
 
-See the [presentation guidelines](https://github.com/socalrug/hackathon-2022-04/blob/master/presentation/presentation_guidelines.md) for the requirements. The team prizes will be determined by a panel of judges using the following [judging guidelines](https://github.com/socalrug/hackathon-2019-11/blob/master/admin/judging_guidelines.md).  The judge's decision is final.
+See the [presentation guidelines](https://github.com/socalrug/hackathon-2022-04/blob/master/presentation/presentation_guidelines.md) for the requirements. The team prizes will be determined by a panel of judges using the following [judging guidelines](https://github.com/socalrug/hackathon-2022-04/blob/master/admin/judging_guidelines.md).  The judge's decision is final.
 
 Below is a list of the awards and [prizes](https://github.com/socalrug/hackathon-2022-04/blob/master/admin/prizes.md). Winner's will be able to select from the available assortment of prizes.
 
@@ -181,9 +179,6 @@ To make this session run as smooth as possible please
 * Remember that the hackathon is primarily an education event and sharing of ideas is highly encouraged.
 
 ## Resources
-
-* [SoCal RUG Hackathon Cheat Sheets](https://github.com/socalrug/hackathon-2019-11/blob/master/cheatsheet/cheatsheet.pdf)
-    * A booklet of cheat sheets that you can print out and bind. It is a handy reference guide
 
 * [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
     * 1-page note sheets covering data science fundamentals and useful R packages.
@@ -231,12 +226,10 @@ To make this session run as smooth as possible please
 Food, drinks and snacks will be provided throughout the event.  We will have vegetarian options available. Please feel free to bring any additional food for yourself if you would like to supplement the meals or if you have other specific dietary constraints.
 
 * **Saturday**
-    * *Breakfast*: coffee, tea, croissant, bagels, and fruit
-    * *Lunch*: Hamburgers, veggie burgers, hot dogs, green salad, fresh fruit, dessert and drinks
-    * *Dinner*: Lasagna (veggie and meat), green salad, fresh fruit, rolls, dessert and drinks
+    * *Lunch*: TBD
+    * *Dinner*: TBD
 * **Sunday**
-    * *Breakfast*: coffee, tea, croissant, muffins, and fruit
-    * *Lunch*: mini sandwiches, fresh fruit, dessert and drinks
+    * *Lunch*: TBD
 * **Snacks and Drinks**
     * Coffee
     * Various teas
@@ -246,7 +239,6 @@ Food, drinks and snacks will be provided throughout the event.  We will have veg
 
 ## Sponsors
 
-* [Data Science Go](https://www.datasciencego.com/)
 * [R Consortium](https://www.r-consortium.org/)
 * [RStudio](https://rstudio.com/)
 * [Taylor and Francis](https://taylorandfrancis.com/)
