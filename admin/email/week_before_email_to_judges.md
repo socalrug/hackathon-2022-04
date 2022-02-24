@@ -9,7 +9,7 @@ When you have a moment, please read through the [judging guidelines](https://git
 
 The schedule of events is list on the main page of the [hackathon GitHub repo](https://github.com/ocrug/hackathon-2022-04).
 
-Please plan to arrive at UCI by 1:30 PM on Sunday.  Teams will start their presentations at 2PM, and everything should wrap-up by 4PM.  You are more than welcome to come at 12 PM if you'd like to have lunch with us.
+Please plan to arrive at UCI by 1:00 PM on Sunday.  Teams will start their presentations at 1:30 PM, and everything should wrap-up by 4PM.  You are more than welcome to come at 12 PM if you'd like to have lunch with us.
 
 Finally, [here](https://github.com/ocrug/hackathon-2022-04/blob/master/parking/Parking%20and%20Building%20Location.pdf) is information about parking.
 
