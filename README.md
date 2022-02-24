@@ -116,10 +116,10 @@ SoCal RUG GitHub Repo: [https://github.com/socalrug/](https://github.com/socalru
 command: 
 
 ```
-git clone git@github.com:socalrug/hackathon-2019-11.git
+git clone git@github.com:socalrug/hackathon-2022-04.git
 ```
 
-Hackathon Repo: [https://github.com/socalrug/hackathon-2019-11](https://github.com/socalrug/hackathon-2019-11)
+Hackathon Repo: [https://github.com/socalrug/hackathon-2022-04](https://github.com/socalrug/hackathon-2022-04)
 
 ## Slack Channel
 
@@ -135,10 +135,6 @@ Slack channel: [https://socalrug.slack.com](https://socalrug.slack.com)
 
 The channel for the hackathon is **hackathon-2019-11**
 
-## Twitter
-
-Please follow us on twitter, [oc_rug](https://tinyurl.com/socalrug-twitter), and also tweet about the event with the hash tag #socalrug
-
 ## Teams
 
 * All participants will work on teams between 2 and 5 people.
@@ -149,9 +145,9 @@ Please follow us on twitter, [oc_rug](https://tinyurl.com/socalrug-twitter), and
 
 ## Award Categories and Prizes
 
-See the [presentation guidelines](https://github.com/socalrug/hackathon-2019-11/blob/master/presentation/presentation_guidelines.md) for the requirements. The team prizes will be determined by a panel of judges using the following [judging guidelines](https://github.com/socalrug/hackathon-2019-11/blob/master/admin/judging_guidelines.md).  The judge's decision is final.
+See the [presentation guidelines](https://github.com/socalrug/hackathon-2022-04/blob/master/presentation/presentation_guidelines.md) for the requirements. The team prizes will be determined by a panel of judges using the following [judging guidelines](https://github.com/socalrug/hackathon-2019-11/blob/master/admin/judging_guidelines.md).  The judge's decision is final.
 
-Below is a list of the awards and [prizes](https://github.com/socalrug/hackathon-2019-11/blob/master/admin/prizes.md). Winner's will be able to select from the available assortment of prizes.
+Below is a list of the awards and [prizes](https://github.com/socalrug/hackathon-2022-04/blob/master/admin/prizes.md). Winner's will be able to select from the available assortment of prizes.
 
 * Most Helpful Person
     * Personal award
