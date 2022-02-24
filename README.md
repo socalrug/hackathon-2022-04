@@ -49,7 +49,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 **Registration**
 
 * Cost: $35
-* Register through [EventBright]()
+* Register through [EventBright](https://www.eventbrite.com/e/socalrug-data-science-hackathon-tickets-274506294717)
 
 ## Schedule
 
