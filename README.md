@@ -92,7 +92,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 
 ## Rules
 
-* All participants must [register for the event](https://www.eventbrite.com/e/socalrug-data-science-hackathon-tickets-74381718723) and have a valid ticket to attend.
+* All participants must [register for the event](https://www.eventbrite.com/e/socalrug-data-science-hackathon-tickets-274506294717) and have a valid ticket to attend.
 * All participants must abide by the [SoCal RUG Code of Conduct](https://github.com/socalrug/hackathon-2019-11/blob/master/code-of-conduct.md), including the [R Consortium and the R Community Code of Conduct](https://wiki.r-consortium.org/view/R_Consortium_and_the_R_Community_Code_of_Conduct).
 * Participants are free to come and go during the event. However, any participant who has not checked-in, in person, by 01:00 PM on Saturday will be considered a "no-show" and their spot may be given to someone else.
 * Though this is an R focused event, participants are free to use any programming language or tool for their work.
