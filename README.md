@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # SoCal RUG Hackathon 2022-04
 
 ## Event Summary

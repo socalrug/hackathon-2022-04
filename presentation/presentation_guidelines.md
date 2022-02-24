@@ -6,12 +6,12 @@ On Sunday afternoon, all teams will prepare and present a final presentation cov
 
 * Best Insight
 * Best Visualization
-* Best Model
-
-All teams that present will be eligible for the *Best Insight* award.  Any team that presents a visualization and/or modeling results will also be eligible for the *Best Visualization* and *Best Model* awards.  Though visualizations in particular are highly encouraged for all presentations, teams are not required to use either visualizations or models in their presentations.
+* Best Analysis
+* Best Presentation
 
 ## Presentations
-All teams will need to make a presentation covering their work during the hackathon, highlighting the *insights*, *visualizations* and/or *models* they developed during the event.  
+
+All teams will need to make a presentation covering their work during the hackathon, highlighting the *insights*, *visualizations*, and/or *presentation* they developed during the event.  
 
 * Each team should prepare a PDF version of their presentation, produced with any software package (e.g. PowerPoint, Keynote, Shiny RMarkdown, etc.)
 * Presentations must be submitted by 1:30 PM on Sunday. Submission details will be covered at the hackathon.
@@ -21,9 +21,10 @@ All teams will need to make a presentation covering their work during the hackat
 * Teams that use interactive visualizations should embed a screenshot of the visualization in their PDF presentation, and show the actual visualization during the presentation.
 
 ## Submit your work to the repo
-* Each team will submit GitHub handle that will be authorized to commit directly to the repo
+
+* Each team will submit GitHub handle that will be authorized to commit directly to the repo.
 * There is a folder, 'presentations' that will have a folder for each team.
-* Please commit you code and slides to the repo before the start of the presentations
+* Please commit you code and slides to the repo before the start of the presentations.
 * If you have problems committing your presentation to the GitHub repo, coordinate with one of the event organizers that can do it for you.
 
 ## Tips for presentations:

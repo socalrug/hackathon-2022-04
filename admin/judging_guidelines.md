@@ -19,19 +19,34 @@
 	* for interactive/dynamic graphics, the interactive aspect should be a fundamental component to understanding the points of the visualization.  Interactivity for interactivity-sake should be avoided.
 	* interactive graphics will not be judged as “better” than static graphics simply because they are interactive.
 
-## Best Model
-* Any team that presents results of their work that were obtained using statistical modeling will be eligible for the *Best Model* award.
+## Best Analysis
+* Any team that presents results of their work that were obtained using statistical modeling or analysis will be eligible for the *Best Analysis* award.
 * Any data modeling method can be used, including:
 	* Linear regression, logistic regression, and other common statistical models
 	* Machine learning models and algorithms such as decisions trees, Random Forest, support vector machines (SVM), and neural networks
 * Teams presenting modeling results should also report an assessment of model performance (e.g. RMSE, confusion matrices/TPR/FPR/accuracy, ROC AUC, etc).
 * Teams should also consider the use of "model explainers", such as the R DALEX package, to visually show what's happening with the models.
 * Models will be judged based the underlying question the model is trying to address, the interpretation of the results, the performance of the model, and the validity of the methods used to derive the model.
+* Alternatively the teams can perform some form of statistical analysis. This could be a descriptive statistics, summary statistics, an examination of the interrelations between features.
+* This award is differentiated from the Best Insight award in that it is based on an overall assessment of the analysis. The Best Insight award is based on a single insight.
 
-## Most Helpful Person
+## Best Presentation
 
-* In addition to the team presentations, the *Most Helpful Person* award will be awarded to the most helpful person at the event, as voted upon by the hackathon participants.
-* Before lunch on Sunday, participants will vote for the most helpful person.  The person with the most votes will receive the *Most Helpful Person* award.
-* Each participant will be given 10 points that they can distribute as they like to any other participant, except themselves. The participant with the most points will be awarded the prize.
-
+* All teams that present their work will be eligible for the *Best Presentation* award.
+* Presentation slides style.
+    * Not too much information on each slide.
+    * Visualization where it adds to the clarity.
+* Presentation content.
+    * Self-introduction.
+    * Overview of presentation.
+    * A clear story.
+* Presentation clarity.
+    * Short, sweet and to the point.
+    * Easy to understand.
+    * Covers the work completely.
+    * Why? what? how?
+    * No broad, sweeping statements.
+* Presenter.
+    * Clarity of speech.
+    * Presentation style (engaging/boring).
 
