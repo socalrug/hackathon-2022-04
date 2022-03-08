@@ -2,4 +2,4 @@
 
 | Name | Email | Status |
 | :--- | :---- | :----- |
-| Tommy Steed | | Confirmed|
+| Tommy Steed | tommysteed5@gmail.com | Confirmed|
