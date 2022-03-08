@@ -55,16 +55,13 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | 08:30 AM            | Registration starts |
 | 08:30 AM - 09:00 AM | Breakfast |
 | 09:00 AM - 09:15 AM | Introduction and wifi setup |
-| 09:15 AM – 10:00 AM | Tutorial - TDB |
-| 10:00 AM - 10:45 AM | Tutorial - TDB |
+| 09:15 AM – 10:45 AM | Tutorial: dplyr, tidyr, ggplot2 - Tommy Steed, Javier Orraca |
 | 10:45 AM - 11:00 AM | Break |
-| 11:00 AM - 11:45 AM | Tutorial - TBD |
-| 11:45 AM - 12:15 PM | Tutorial - TBD |
-| 12:15 PM - 12:45 PM | Tutorial - TBD |
-| 01:00 PM – 01:30 PM | Lunch |
-| 01:30 PM            | Registration closes |
-| 01:30 PM – 02:00 PM | Welcome talk, data set overview, groups formed |
-| 02:00 PM – 05:45 PM | Working Session |
+| 11:00 AM - 12:30 AM | Tutorial: tidymodels - Emil Hvitfeldt |
+| 12:30 PM – 01:00 PM | Lunch |
+| 01:00 PM            | Registration closes |
+| 01:00 PM – 01:30 PM | Welcome talk, data set overview, groups formed |
+| 01:30 PM – 05:45 PM | Working Session |
 | 05:45 PM – 06:30 PM | Dinner |
 | 06:30 PM – 07:30 PM | Discussion Session |
 | 07:00 PM - 10:00 PM | Working Session |
