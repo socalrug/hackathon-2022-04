@@ -2,7 +2,7 @@
 
 | Name | Email | Status |
 | :--- | :---- | :----- |
-| Amy Tzu-Yu Chen | amy17519@gmail.com | Asked |
+| Amy Tzu-Yu Chen | amy17519@gmail.com | Has no way to get to Irvine |
 | Arlo Randall | arlorandall@gmail.com | Asked |
 | Chris Pounds | chris_pounds@edwards.com | Asked |
 | Divya Swaminathan | sdivya.swaminathan@gmail.com | |
@@ -11,7 +11,7 @@
 | Emil Hvitfeldt | emil.h.hvitfeldt@gmail.com | Emil |
 | Giang (Gigi) Nguyen | | Asked |
 | Han Man | hanman@amazon.com | Asked |
-| Hanif Mahboobi | | Asked|
+| Hanif Mahboobi | | Checking his schedule |
 | Jeff B | jeff@jeffbio.com | Asked |
 | Karie Moorman | mookarie@amazon.com | Asked |
 | Malcolm Barrett | mbermanmd@gmail.com | |
