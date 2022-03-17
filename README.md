@@ -53,8 +53,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | Time | Event |
 | :--  | :--   |
 | 08:30 AM            | Registration starts |
-| 08:30 AM - 09:00 AM | Breakfast |
-| 09:00 AM - 09:15 AM | Introduction and wifi setup |
+| 09:00 AM - 09:15 AM | Introduction and WiFi setup |
 | 09:15 AM – 10:45 AM | Tutorial: dplyr, tidyr, ggplot2 - Tommy Steed, Javier Orraca |
 | 10:45 AM - 11:00 AM | Break |
 | 11:00 AM - 12:30 AM | Tutorial: tidymodels - Emil Hvitfeldt |
@@ -71,7 +70,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 
 | Time | Event |
 | :--- | :--   |
-| 08:30 AM - 09:00 AM | Breakfast | 
+| 08:30 AM - 09:00 AM | Doors open | 
 | 09:00 AM – 12:00 PM | Working session |
 | 12:00 PM – 12:45 PM | Lunch  |
 | 12:45 PM – 01:30 PM | Groups prepare presentations |
@@ -79,6 +78,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | 03:00 PM – 03:30 PM | Judges deliberate; Complete event survey |
 | 03:30 PM – 04:00 PM | Award presentation & wrap-up |
 
+*Note* The building is locked all day Sunday. If you leave during the event, please arrange to have someone open the door for you. You can also text John Peach at 802 735 2059 to let you in.
 
 ## Rules
 
