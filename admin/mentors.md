@@ -16,7 +16,7 @@
 | Karie Moorman       | mookarie@amazon.com          | Reminded  | |
 | Malcolm Barrett     | mbermanmd@gmail.com          | Declined  | |
 | Marcus Brown        | bmarcu@amazon.com            | Asked     | |
-| Neal Fultz          | nfultz@gmail.com             | Reminded  | |
+| Neal Fultz          | nfultz@gmail.com             | Declined  | |
 | Rebecca Butler      | rebeccakbutler@gmail.com     | Reminded  | |
 | Shujing Dong        | shujdong@amazon.com          | Asked     | |
 | Soroosh Sohangir    | soroosh.s@gmail.com          | Reminded  | |
