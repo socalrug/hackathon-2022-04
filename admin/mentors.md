@@ -9,7 +9,7 @@
 | Dwight Wynne        | dpwynne@gmail.com            | Saturday 2:30-5:30 PM | |
 | Efi Karra           | efi@amazon.com               | Reminded  | |
 | Emil Hvitfeldt      | emil.h.hvitfeldt@gmail.com   | Both days | |
-| Giang (Gigi) Nguyen |                              | Asked Amy for email address | |
+| Giang (Gigi) Nguyen |                              | Declined  | |
 | Han Man             | hanman@amazon.com            | Declined  | |
 | Hanif Mahboobi      |                              | Declined  | |
 | Jeff Bhasin         | jeff@jeffbio.com             | Declined  | |
