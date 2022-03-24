@@ -15,11 +15,11 @@
 | Jeff Bhasin         | jeff@jeffbio.com             | Declined  | |
 | Karie Moorman       | mookarie@amazon.com          | Reminded  | |
 | Malcolm Barrett     | mbermanmd@gmail.com          | Declined  | |
-| Marcus Brown        | bmarcu@amazon.com            | Asked     | |
+| Marcus Brown        | bmarcu@amazon.com            | Declined  | |
 | Neal Fultz          | nfultz@gmail.com             | Declined  | |
 | Rebecca Butler      | rebeccakbutler@gmail.com     | Reminded  | |
 | Shujing Dong        | shujdong@amazon.com          | Asked     | |
 | Soroosh Sohangir    | soroosh.s@gmail.com          | Reminded  | |
 | Tommy Steed         | tommysteed5@gmail.com        | Confirmed | |
 | Youlim Huh          | careyhuh@gmail.com           | Confirmed | |
-| Yu Guo              | yguoamz@amazon.com           | Asked     | |
+| Yu Guo              | yguoamz@amazon.com           | Declined  | |
