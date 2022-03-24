@@ -18,7 +18,7 @@
 | Marcus Brown        | bmarcu@amazon.com            | Declined  | |
 | Neal Fultz          | nfultz@gmail.com             | Declined  | |
 | Rebecca Butler      | rebeccakbutler@gmail.com     | Reminded  | |
-| Shujing Dong        | shujdong@amazon.com          | Asked     | |
+| Shujing Dong        | shujdong@amazon.com          | Declined  | |
 | Soroosh Sohangir    | soroosh.s@gmail.com          | Reminded  | |
 | Tommy Steed         | tommysteed5@gmail.com        | Confirmed | |
 | Youlim Huh          | careyhuh@gmail.com           | Confirmed | |
