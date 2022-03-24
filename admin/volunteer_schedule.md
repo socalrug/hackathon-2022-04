@@ -2,11 +2,11 @@
 
 The following tasks are general things that the Hackathon volunteers can assist with throughout the event:
 
--   check the hot water pots, refilling as needed
--   check snack and drink supplies
--   help to keep food areas clean
--   assist with transporting food and supplies into the Hackathon site
--   assist during meal times, food set-up, after meal clean-up
+-   Check and refill the coffee makers, as needed.
+-   Check snack and drink supplies.
+-   Help to keep food areas clean
+-   Assist with transporting food and supplies into the hackathon site
+-   Assist cleaning up after meal, and at the end of each day.
 
 Below is a schedule of specific times and tasks for the volunteers
 
@@ -20,7 +20,7 @@ Date      	 | Time                |  Person(s)     | Primary Tasks |
 |            | 08:00 AM - 09:00 AM | 3 people  		| Bring supplies from cars to SB1, set-up coffee makers, snack station, and post signs on rooms. |
 |            | 09:00 AM - 01:00 PM | 1 person       | Check people in. Pack-up the registration table. |
 |            | 09:30 AM - 11:15 PM | 2 people		| Ensure coffee makers are ready for the break. Put out snacks. After the break, clean up and restock the snack area. |
-             | 11:30 AM - 12:00 PM | 2 people       | Ensure coffee makers are ready for lunch. |
+|            | 11:30 AM - 12:00 PM | 2 people       | Ensure coffee makers are ready for lunch. |
 |            | 01:00 PM - 01:30 PM | 2 people 	    | Clean up from lunch. Refill coffee makers and snacks. |
 |            | 04:30 PM - 05:00 PM | 2 people  		| Ensure coffee makers are ready for supper. |
 |            | 06:30 PM - 07:00 PM | 2 people		| Clean up from supper, refill coffee maker and snacks. |
