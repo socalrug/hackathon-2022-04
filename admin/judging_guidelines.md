@@ -1,6 +1,7 @@
 # Judging Guidelines
 
 ## Best Insight
+
 * All teams that present their work will be eligible for the *Best Insight* award.
 * An *insight* will be considered as piece of “knowledge” gained through the analysis of the hackathon data set.  This could include, for example:
 	* an interesting conclusion or understanding about the data
@@ -9,6 +10,7 @@
 * Insights will be judged based upon how much practical impact the insight could have on the subject of the hackathon data set, and how well the associated analysis supports it.
 
 ## Best Visualization
+
 * Any team that presents a visualization as part of their final submission is eligible for the *Best Visualization* award.
 * Visualizations can be either static graphics (e.g. a plot or 2-D graphic), or an interactive/dynamic visualization (e.g. a web page or a Shiny application with graphics components).
 * Visualizations will be judged primarily on their ability to clearly convey an interesting and/or insightful aspect of the hackathon data set.  Factors include:
@@ -20,6 +22,7 @@
 	* interactive graphics will not be judged as “better” than static graphics simply because they are interactive.
 
 ## Best Analysis
+
 * Any team that presents results of their work that were obtained using statistical modeling or analysis will be eligible for the *Best Analysis* award.
 * Any data modeling method can be used, including:
 	* Linear regression, logistic regression, and other common statistical models
