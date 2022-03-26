@@ -1,6 +1,6 @@
 # 2022-04 SoCal RUG Hackathon Award Winners
 
-## Best Visualization Award
+## Best Visualization
 
 Team: 
 
@@ -14,10 +14,18 @@ Team:
 | Name | Email |
 | :--  | :--   |
 
-## Best Model
+## Best Analysis
 
 Team: 
 
 | Name | Email |
 | :--  | :--   |
+
+## Best Presentation
+
+Team: 
+
+| Name | Email |
+| :--  | :--   |
+
 
