@@ -148,6 +148,10 @@ Below is a list of the awards and [prizes](https://github.com/socalrug/hackathon
 
 On Saturday evening, we will have an hour long data challenge event, to take a break from the main hackathon work.  This will be an opportunity to interact with other participants outside of your team, practice your data hacking skills on a new data set, and win prizes.
 
+## Post-event Survey
+
+After the event, please complete the [SoCal RUG Hackathon 2022-04 Survey](https://docs.google.com/forms/d/e/1FAIpQLSeud0Xp8wEhrOGFrrsNcbzorfBHpRAQdnJ40Z_BL48fSQ6O-A/viewform). This is important feedback so that we can constantly improve our events.
+
 ## Resources
 
 * [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
