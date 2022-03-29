@@ -146,7 +146,7 @@ Below is a list of the awards and [prizes](https://github.com/socalrug/hackathon
 
 ## Saturday Evening Challenge Event
 
-On Saturday evening, we will have an hour long data challenge event, to take a break from the main hackathon work.  This will be an opportunity to interact with other participants outside of your team, practice your data hacking skills on a new data set, and win prizes.
+On Saturday evening, we will have an hour long data challenge event, the idea is to take a break from the main hackathon work, meet peopel and have some fun. This will be an opportunity to interact with other participants outside of your team, practice your data hacking skills on a new data set, and win prizes.
 
 ## Post-event Survey
 
