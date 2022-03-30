@@ -8,7 +8,7 @@
 | Divya Swaminathan   | sdivya.swaminathan@gmail.com | Asked     | |
 | Dwight Wynne        | dpwynne@gmail.com            | Saturday 2:30-5:30 PM | |
 | Efi Karra           | efi@amazon.com               | Reminded  | |
-| Emil Hvitfeldt      | emil.h.hvitfeldt@gmail.com   | Both days | |
+| Emil Hvitfeldt      | emil.h.hvitfeldt@gmail.com   | Both days | 17816 Summer Ave, Artesia, 90701 |
 | Giang (Gigi) Nguyen |                              | Declined  | |
 | Han Man             | hanman@amazon.com            | Declined  | |
 | Hanif Mahboobi      |                              | Declined  | |
