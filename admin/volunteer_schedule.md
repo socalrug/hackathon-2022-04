@@ -14,8 +14,8 @@ Below is a schedule of specific times and tasks for the volunteers
 
 On Sunday, we need people to regularly check to open the doors. We will ask participants who can't enter to send a message on Slack, but we still need someone to check regularly
 
-|Date      	 | Time                |  Person(s)     | Volunteer                      |Primary Tasks |
-| :--        | :--                 | :--          	| :--                            |              |
+| Date       | Time                |  Person(s)     | Volunteer                      |Primary Tasks |
+| :--        | :--                 | :--          	| :--                            | :--          |
 | 2022-04-02 | 08:00 AM - 09:00 AM | 4 people		| Sally, Han, Andrew, Samson     | Set up the sign-in table, and check people in. |
 |            | 08:00 AM - 09:00 AM | 3 people  		| Akshay, Garrett, Brian         |  Bring supplies from cars to SB1, set-up coffee makers, snack station, and post signs on rooms. |
 |            | 09:00 AM - 01:00 PM | 1 person       | Sally, Han, Andrew, Samson     | Check people in. Pack-up the registration table. |
