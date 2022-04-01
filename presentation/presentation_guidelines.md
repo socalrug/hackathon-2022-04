@@ -2,7 +2,7 @@
 
 ## Overview
 
-On Sunday afternoon, all teams will prepare and present a final presentation covering their work during the hackathon, highlighting the insights and conclusions they found within the data set.  The presentations will be presented to a panel of judges who will then award prizes in three categories:
+On Sunday afternoon, all teams will prepare and present a final presentation covering their work during the hackathon. The presentation should highlight the insights and conclusions found within the data set.  The presentations will be presented to a panel of judges who will then award prizes in these categories:
 
 * Best Insight
 * Best Visualization
@@ -11,29 +11,30 @@ On Sunday afternoon, all teams will prepare and present a final presentation cov
 
 ## Presentations
 
-All teams will need to make a presentation covering their work during the hackathon, highlighting the *insights*, *visualizations*, and/or *presentation* they developed during the event.  
+All teams will need to make a presentation covering their work during the hackathon, highlighting the *insights*, *visualizations*, *analysis* and/or *presentation* they developed during the event.  
 
 * Each team should prepare a PDF version of their presentation, produced with any software package (e.g. PowerPoint, Keynote, Shiny RMarkdown, etc.)
-* Presentations must be submitted by 1:30 PM on Sunday. Submission details will be covered at the hackathon.
 * Each team will have 5 minutes to present.  Due to the number of teams that will present and time restrictions, presentations will be stopped promptly at 5 minutes.
-* There is no specific limit to the number of pages/slides for presentations as long as the presentation can fit within the 5 minute time limit.
-* Each team will present from a team member’s laptop to the main projector screen in the presentation room.
-* Teams that use interactive visualizations should embed a screenshot of the visualization in their PDF presentation, and show the actual visualization during the presentation.
+* There is no specific limit to the number of pages/slides for presentations as long as the presentation can fit within the 5-minute time limit.
+* Presentations will be made from the computer and projector in the presentation room. If a personal computer is needed, you will need to be approved before 12:30 PM on Sunday. You will have one additional minute to connect the personal computer to the projector, however, if it takes longer the time will be taken out of your presentation time.
+* Teams that use interactive visualizations should embed a screenshot of the visualization in their PDF presentation, and show the actual visualization during the presentation. They will need to submit the interactive visualization along with the PDF presentation. Ideally, these teams should be able to present without using a personal computer.
 
 ## Submit your work to the repo
 
-* Each team will submit GitHub handle that will be authorized to commit directly to the repo.
-* There is a folder, 'presentations' that will have a folder for each team.
-* Please commit you code and slides to the repo before the start of the presentations.
-* If you have problems committing your presentation to the GitHub repo, coordinate with one of the event organizers that can do it for you.
+* Presentations must be submitted no later than 12:30 PM on Sunday. 
+* Late presentations may result in team disqualification.
+* Presentations are to be emailed to [hackathon2022@jppeach.com](mailto:hackathon2022@jppeach.com). 
+* The filename of the presentation should be your group name.
+* After the hackathon, people like to look at the work that other teams did. We strongly encourage you to submit all of the work product that was created. This would be things such as code, markdown scripts, PowerPoint slides, figures, and anything else that was generated during the event.
 
 ## Tips for presentations:
 
-* We will have 1.5 hour set aside specifically for preparing presentations after lunch on Sunday, from 1:30 — 3:00 PM.
-* However, be thinking about your presentation throughout the event and start preparations early.
+* We will have 1.5 hours set aside specifically for preparing presentations after lunch on Sunday, from 1:30 — 3:00 PM.
+* Think about your presentation throughout the event and start preparations early.
 * Simple and clear presentations are often more effective than more complex presentations.
+* Provide context for your work and then present one or two important findings.
+* Focus the presentation on one or two facts that you would want someone to remember a week from now and a single message that you would want them to remember six months from now.
 * Teams only have 5 minutes to present so strive to present a clear message that can be delivered within the time limit.  This likely translates to presentations with 2 or 3 slides.
-* Decide in advance which laptop your team will be present from.
-* Decide in advance who will speak during the presentation.
+* Decide in advance who will speak during the presentation. It is generally best to have a single presenter.
 * Practice your presentation at least one time to get a feel for timing and content.
 

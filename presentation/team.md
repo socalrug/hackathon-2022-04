@@ -1,4 +1,4 @@
 # Team
 
-| Team Name | GitHub | Location | Members |
-| :--       | :--      | :--    | :--     |
+| Team Name | Location | Members |
+| :--       | :--      | :--     |
