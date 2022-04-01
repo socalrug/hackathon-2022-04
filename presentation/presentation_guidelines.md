@@ -29,7 +29,7 @@ All teams will need to make a presentation covering their work during the hackat
 
 ## Tips for presentations:
 
-* We will have 1.5 hours set aside specifically for preparing presentations after lunch on Sunday, from 1:30 — 3:00 PM.
+* There is time set aside for practicing the oral presentations.
 * Think about your presentation throughout the event and start preparations early.
 * Simple and clear presentations are often more effective than more complex presentations.
 * Provide context for your work and then present one or two important findings.

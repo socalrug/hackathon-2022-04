@@ -73,7 +73,7 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | 08:30 AM - 09:00 AM | Doors open | 
 | 09:00 AM – 12:00 PM | Working session |
 | 12:00 PM – 12:45 PM | Lunch  |
-| 12:45 PM – 01:30 PM | Groups prepare presentations |
+| 12:45 PM – 01:30 PM | Practice presentations |
 | 01:30 PM – 03:00 PM | Group presentations |
 | 03:00 PM – 03:30 PM | Judges deliberate; Complete event survey |
 | 03:30 PM – 04:00 PM | Award presentation & wrap-up |
@@ -213,7 +213,10 @@ Food, drinks and snacks will be provided throughout the event.  We will have veg
 
 ## Sponsors
 
+* [Amazon Web Services](https://aws.amazon.com/)
+* [Anaheim Ducks](https://www.nhl.com/ducks)
 * [R Consortium](https://www.r-consortium.org/)
 * [RStudio](https://rstudio.com/)
+* [Saturn Cloud](https://saturncloud.io/)
 * [Taylor and Francis](https://taylorandfrancis.com/)
 * [UC Irvine - Paul Merage School of Business](https://merage.uci.edu/) 
