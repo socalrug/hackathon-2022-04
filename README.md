@@ -200,10 +200,10 @@ After the event, please complete the [SoCal RUG Hackathon 2022-04 Survey](https:
 Food, drinks and snacks will be provided throughout the event.  We will have vegetarian options available. Please feel free to bring any additional food for yourself if you would like to supplement the meals or if you have other specific dietary constraints.
 
 * **Saturday**
-    * *Lunch*: Sandwiches (Turkey & Ham, Veggie), chips, cookies, orange drinks
-    * *Dinner*: Lasagna (Meat and veggie), salad, rolls, dessert, soda, water
+    * *Lunch*: Sandwiches (Turkey & Ham, Veggie), chips, cookies
+    * *Dinner*: Lasagna (Meat and veggie), salad, rolls, dessert
 * **Sunday**
-    * *Lunch*: Burgers (Meat and veggie), chips, cookies, dessert, soda, water
+    * *Lunch*: Burgers (Meat and veggie), chips, cookies, dessert
 * **Snacks and Drinks**
     * Coffee
     * Various teas
