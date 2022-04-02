@@ -10,3 +10,9 @@ We need a minimum of 20 prizes
 | Saturn Cloud - 100 hours/month for life on 64 GB machines | 5 |
 | $100 AWS Cloud Credits | 5 |
 | A pair of tickets to a Ducks game in April (except 4/19) | 5 |
+| Milk frother | 2 |
+| Solar Power Bank | 1 |
+| Aromatherapy Diffuser | 1 |
+| Hydroflask | 2 |
+| Tile - Bluetooth tracker | 2 |
+| Mini Drone | 1 |
