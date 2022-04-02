@@ -11,7 +11,7 @@ We need a minimum of 20 prizes
 | $100 AWS Cloud Credits | 5 |
 | A pair of tickets to a Ducks game in April (except 4/19) | 5 |
 | Milk frother | 2 |
-| Solar Power Bank | 1 |
+| Solar Power Bank | 2 |
 | Aromatherapy Diffuser | 1 |
 | Hydroflask | 2 |
 | Tile - Bluetooth tracker | 2 |
