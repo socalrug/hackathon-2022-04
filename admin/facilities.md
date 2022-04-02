@@ -7,8 +7,9 @@
 | Name | Telephone | Email |
 | :--  | :-- | :-- |
 | Brittany Deneau   | (714)801-5366 | bdeneau@uci.edu |
-| Vanessa Tafreshi  | (714)356-1861 | vtafresh@uci.edu |
+| Judy Lotfy        |               | judy.lotfy@uci.edu |
 | Michelle Steinman | (760)672-9570 | michelle.steinman@uci.edu |
+| Vanessa Tafreshi  | (714)356-1861 | vtafresh@uci.edu |
 
 ## Facility Notes
 
