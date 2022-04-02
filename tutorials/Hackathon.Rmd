@@ -1,0 +1,786 @@
+---
+title: "SoCal RUG Hackathon"
+subtitle: "Intro to Tidyverse Training on 2022-04-02"
+output:
+  html_document:
+    theme: cosmo
+    df_print: paged
+    toc: true
+    toc_float: true
+---
+
+# 1. BACKGROUND  
+
+**NO CODING ZONE**  
+
+* Coding in R is really just calling a series of functions
+* There are thousands of functions available in R and the total increases daily
+* This is what makes R so powerful _but also intimidating_
+* Some functions are available just by opening R but it would be inefficient to include them all
+* You need to determine which external functions you want to use for each project
+* To get started, we will focus on 6 functions (along with some others not covered here) bundled together in the [dplyr](https://dplyr.tidyverse.org/) package
+* Later in this tutorial, we'll introduce you to the `tidyr` and `ggplot2` packages for easy data pivoting and layer-based visualizations
+* **Terminology**: A "package" (or "library") is a bundle of functions that extends the base R vocabulary
+* **Syntax**: Throughout this R Markdown document, in line functions and object names will be written `like_this`
+
+![](dplyr.png){width=30%}
+
+**THE 6 DPLYR FUNCTIONS COVERED:**
+
+* `group_by()`:  as the name implies - use this to determine what you want to group your data by
+* `summarise()`:  used in tandem with group_by - use this to determine what to summarise within selected groups
+* `mutate()`: use this to create a new variable
+* `inner_join()`: use this to join tables
+* `filter()`: use this to filter rows
+* `select()`: use this to select columns
+
+END OF BACKGROUND INFO.  NOW LET'S BEGIN OUR SCRIPT  
+
+# 2. CREATE A NEW R SCRIPT  
+
+1. Create a working directory on your system - Save any data here  
+2. Open RStudio and create a new script (File -> New File -> R Script)
+* Save it to your working directory
+* Now you see a .R file in your newly created directory
+* R knows the file is saved to your working directory - but not to save/read files here
+3. Set working directory to source file directory
+* Now R knows to read/save files here
+* Copy and paste the console line command to your script
+
+
+NOW YOU ARE READY TO START CODING  
+
+Before we start coding - you should save the following files from the git repository to your working directory:
+
+* Hackathon.rmd  
+* Hackathon.r  
+* Hackaton.html  
+* clarity_map.csv  
+
+Most important is the csv file.  This will be used in a later section.  
+
+# 3. IMPORT REQUIED PACKAGES  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+#install.packages('dplyr')  
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(data.table)
+library(plotly)
+
+
+```
+
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Interpret `install.packages()` as "save a local copy of (this external CRAN package)"  
+* Interpret `library()` as "for this working session of R, activate (this locally saved package)"  
+* Notice how R is structured: `function(argument(s))`  
+
+You only need to install packages once.  You need to activate selected packages every session.  Best practice is to begin any script with the packages you will need for the task at hand.  For this exercise we need the `dplyr` package (no surprise) and the `data.table` package (explained below).
+
+* `install.packages('package_name')`:  makes a local copy of a package that resides on CRAN
+* `library(package_name)`:  makes all functions contained within selected package available during the current R working session
+
+* Base R functions are accessible without the need to load any packages
+* Fun fact: Base R was used to develop many of the `dplyr` functions
+
+
+# 4. IMPORT & EXPORT DATA 
+
+There are several datasets that are part of base R or part of the various packages you might install.  In order to make this demonstration self contained, we will be using one of these datasets.  
+
+**IMPORT INTERNAL DATASET**  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+# READ IN AN INTERNAL DATASET
+
+df.diamonds <- diamonds
+
+```
+
+
+**IMPORT EXTERNAL CSV**  
+Generally speaking, you will not be using internal datasets for your projects.  It is more common to import external files, such as csv files.  This section demonstrates how to import an external csv file:
+
+* Save the clarity_map.csv file to your working directory.
+* Use the code below to import this file into our current working session.
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+# READ IN CSV 
+df.mapping <- read.csv('clarity_map.csv')
+df.mapping <- fread('clarity_map.csv')
+
+```
+
+
+
+DECONSTRUCTING CODE ABOVE:  
+
+* The left arrow `<-` should be interpreted as "Create a new object"
+* This is also known as the "assign operator"
+* NOTE: Two functions demonstrated for importing data: `fread()` and `read.csv()`  
+* INTERPRET: `read.csv('file.csv')` AS  "import into this active R session ('file.csv')  
+* INTERPRET: `fread.csv('file.csv')` AS "import into this active R session ('file.csv') - and do it much faster than read.csv would.  
+* Why not just use the quicker `fread()` every time?  It is not internal - requires us to load data.table - `read.csv()` is internal - no external packages required.  
+
+TRANSLATE CODE TO ENGLISH  
+
+* Create a new object called `df.mapping` by not so quickly importing the file 'clarity_map.csv'.
+* Create a new object called `df.mapping` by much more quickly importing the file 'clarity_map.csv'  
+* We did not need to specify a directory because these files are in our working directory.  
+
+Once you import the data - you will see your 2 new objects in the upper right hand console:  
+
+* `df.diamonds1`
+* `df.diamonds2`
+
+NOTE:  We did not have to specify a directory to export to or import from.  This is because we set our working directory - and R knows to look here.  
+
+# 5. GROUP BY AND SUMMARISE   
+Calculate total price by table:   
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg <- df.diamonds %>%
+  group_by(clarity) %>%
+  summarise(Total.Price = sum(price), Observations = n())
+
+dim(df.agg)
+
+
+```
+
+
+DECONSTRUCT THE CODE ABOVE  
+
+* `%>%` is called a pipe.  
+* Interpret a pipe as saying "THEN"  
+* Code snippets that are piped together will be run together - not like our earlier commands.  
+* Review:  left-hand arrow interpreted as create a new object.  
+* Interpret `group_by(column)` as: 'combine your dataset (into levels of selected column)'.
+* Interpret `summarise()` as: 'Sum totals within each group_by level (these are the values to sum)'.  
+* NOTE: `group_by()` and `summarise()` are almost always used in tandem.  
+
+TRANSLATE THE CODE TO ENGLISH  
+
+* Create a new object named `df.group` as follows:  
+* Start with `df.diamonds` THEN  
+* Group by the column 'clarity' THEN 
+* Sum total price within each level table, and call this variable 'Total.Price'
+
+Notice there is a new object in our upper left hand panel called `df.agg`.  This object has 127 rows and 2 columns.  Click on object for further inspection reveals the columns are 'clarity' and 'Total.Price' as expected.
+
+
+# 6. MUTATE
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg <- df.agg %>%
+  mutate(average.price = Total.Price/Observations)
+
+dim(df.agg)
+
+```
+
+DECONSTRUCT THE CODE ABOVE  
+
+* Interpret `mutate(variable.name)` as "create new variable and that variable name is "variable.name".  
+* In this case, the new variable is called 'average.price' and it is equal to 'Total.Price' divided by observations.
+
+# 7. INNER JOIN  
+
+Map the 8 clarity levels to 3 categories as follows:  
+
+```{r message=FALSE, echo=FALSE, fig.align='center', warning=FALSE}
+
+library(kableExtra)
+
+df.mapping <- read.csv('clarity_map.csv')
+
+df.mapping %>%
+  kbl(caption = "") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+
+Use the following snippet:  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg <- df.agg %>%
+  inner_join(df.mapping, by = 'clarity')
+
+dim(df.agg)
+
+```
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Interpret function `inner_join()` as "perform an inner join on previous table (with new table named here).  
+* Inner join keeps all rows in common to both tables.  My most commonly used - mappings I build.  
+* Left join is also used frequently.  
+* This will add the column "Mapping" to the existing `df.agg` table.  
+
+TRANSLATE CODE TO ENGLISH:  
+
+* Create a new object called `df.agg`  
+* To create this object, start with `df.agg` THEN  
+* Join to the `df.mapping` table by the column 'clarity'
+
+As with everything, there is more than one way to accomplish this task.  The snippet below demonstrates an alternative method using `dplyr::if_else()`.  The end result is identical to the `inner_join()` method - so both methods are correct.  A table makes sense when you have a lot of levels. `if_else()` is easier if you have just a few levels.  Ultimately, this is a personal choice and depends on multiple factors that are different for each individual and each project.  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg <- df.agg %>%
+  mutate(clarity.map2 = if_else(clarity %in% c('I1','SI2'),'Bad',
+                                if_else(clarity %in% c('SI1','VS2','VS1','VVS2'),'Medium',
+                                        if_else(clarity %in% c('VVS1','IF'),'Good','Undefined'))))
+
+```
+
+Nested `if_else()` functions (or "`if_else()` functions within `if_else()` functions"), as shown above, can be difficult to digest. A third alternative is using `dplyr::case_when()` - If you're comfortable with SQL, this function will feel right at home. Below is an example of `case_when()` within a `mutate()` function:
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg <- df.agg %>%
+  mutate(clarity.map3 = case_when(clarity %in% c('I1','SI2') ~ 'Bad',
+                                  clarity %in% c('SI1','VS2','VS1','VVS2') ~ 'Medium',
+                                  clarity %in% c('VVS1','IF') ~ 'Good',
+                                  TRUE ~ 'Undefined'))
+
+```
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Notice the use of `%in%`: this is a boolean based on being an element of a list.  
+* Notice the use of `c()`: this is base R function to concatenate strings and other R objects
+
+TRANSLATE CODE TO ENGLISH:  
+
+# 8. FILTER  
+
+Only look at diamonds mapped to "Good".  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+df.agg <- df.agg %>%
+  filter(clarity.map == 'Good')
+
+
+```
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Interpret the function `filter()` as: "only look at rows where (this is true)".  
+
+TRANSLATE THE CODE TO ENGLISH:  
+
+* Create a new object called `df.agg`  
+* Begin with the current object `df.agg` THEN
+* Only include rows where the value for the column "clarity.map" is equal to the value 'Good'.  
+
+Filter will result in less than or equal to the original number of rows.  Filter will not impact the number of columns.  
+
+# 9. SELECT  
+
+Remove the columns "clarity.map2" and "clarity.map3" for housekeeping
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg1 <- df.agg %>%
+  select('clarity', 'Total.Price', 'Observations', 'average.price', 'clarity.map')
+
+
+```
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Interpret `select()` as "select the specific columns being stated"  
+
+TRANSLATE CODE TO ENGLISH:  
+
+* Create a new object called `df.agg1`  
+* Begin with the object `df.agg` THEN  
+* Select only the columns explicitly stated in the `select()` function
+
+ALTERNATE METHOD FOR TASK 7:  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+df.agg2 <- df.agg %>%
+  select(-c('clarity.map2', 'clarity.map3'))
+
+df.agg <- df.agg1
+rm(df.agg1, df.agg2)
+
+```
+
+DECONSTRUCT THE CODE ABOVE:  
+
+* Instead of specifying which columns to keep - it is sometimes easier to define which columns NOT to keep.  
+* This is done by placing the negative sign before `c()`  
+
+TRANSLATE THE CODE TO ENGLISH:
+
+* Create a new object called `df.agg2`  
+* Begin with the current object `df.agg` THEN  
+* Select all columns EXCEPT "clarity.map2" and "clarity.map3"
+
+# 10. dplyr SUMMARY  
+
+We have now taken the diamonds dataset THEN  
+
+* We grouped by table THEN we summed price THEN  
+* we added a new column called "average.price"  THEN  
+* we joined the `df.mapping` table THEN  
+* we filtered out rows not mapped to 'Good' THEN 
+* we removed two columns
+
+This was all done sequentially on the same dataset.  This is a good representation of how code is created.  Very piecemeal and iterative.  It is very rare that you go into a project knowing all the tasks you need to complete sequentially.  Ultimately, however, you do get your final result - like in our simplified example above.  At this point, you can use the pipe operator to clean up and chain your code together as follows:  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+df.chained <- df.diamonds %>%
+  group_by(clarity) %>%
+  summarise(Total.Price = sum(price), Observations = n()) %>%
+  mutate(average.price = Total.Price/Observations) %>%
+  inner_join(df.mapping, by = 'clarity') %>%
+  mutate(clarity.map2 = if_else(clarity %in% c('I1','SI2'),'Bad',
+                                if_else(clarity %in% c('SI1','VS2','VS1','VVS2'),'Medium',
+                                        if_else(clarity %in% c('VVS1','1F'),'Good','Undefined'))),
+         clarity.map3 = case_when(clarity %in% c('I1','SI2') ~ 'Bad',
+                                  clarity %in% c('SI1','VS2','VS1','VVS2') ~ 'Medium',
+                                  clarity %in% c('VVS1','IF') ~ 'Good',
+                                  TRUE ~ 'Undefined')) %>%
+  filter(clarity.map == 'Good') %>%
+  select(c('clarity', 'average.price'))
+
+```
+
+# 11. TIDYR INTRO
+
+![](tidyr.png){width=30%}
+
+The two main functions that we'll learn about from the `tidyr` package are `pivot_longer()` and `pivot_wider()`. Pivoting your data longer will increase the number of observations (rows) but decrease the number of variables (columns). Pivoting your data longer will decrease the number of observations but increase the number of variables.
+
+For this `tidyr` overview, we're going to step away from the `df.diamonds` object and load / assign a new object, `tidyr_data`, and let's take a glimpse of the data:
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+# The relig_income dataset is part of the tidyr package
+tidyr_data <- relig_income
+
+glimpse(tidyr_data)
+```
+
+After review, we can group the above data points into three buckets:
+
+* _religion_, stored in the rows,
+* _income_ spread across the column names, and
+* _count_ stored in the cell values
+
+While the "out of the box" format of the `tidyr_data` is nice on the eyes, it makes it more difficult to model or visualize. For this, we'll explore the `tidyr::pivot_longer()` function.
+
+# 12. PIVOT_LONGER
+
+The `pivot_longer()` function is structured as follows with four main arguments:
+
+```{r eval=FALSE}
+df %>% 
+  pivot_longer(
+    cols = c(col_name_a, col_name_b),
+    names_to = "new_col to capture all variables being pivoted",
+    values_to = "new col for values"
+  )
+```
+
+Lets put the above to practice! The goal of this exercise will be to pivot long the `tidyr_data` object and end up with a new tibble that only has 3 columns (instead of 11): _religion_, _income_, and _count_
+
+```{r message=FALSE, echo=TRUE}
+tidyr_long <- tidyr_data %>% 
+  pivot_longer(
+    cols = !religion,
+    names_to = "income",
+    values_to = "count" 
+  )
+
+glimpse(tidyr_long)
+```
+
+DECONSTRUCT THE CODE ABOVE:
+
+* The first argument in `pivot_longer()` describes which columns need to be reshaped
+  * In this case, it’s every column except "religion"
+* The `names_to` argument gives the name of the variable that will be created from the data stored in the column names, i.e. "income"
+* The `values_to` argument gives the name of the variable that will be created from the data stored in the cells, i.e. "count"
+
+Now, lets say your boss is "OK" with what you've created with the `tidyr_long` object, but they want to see a different cut of the data... This time, your boss wants to see "income" as the core identifier and wants to see "religion" as the columns to capture the "count" values... What to do?!?
+
+# 13. PIVOT_WIDER
+
+We've learned about pivoting data _long_ but now lets pivot the data _wide_ as the boss requested. The `pivot_wider()` function is structured as follows with three main arguments:
+
+```{r eval=FALSE}
+df %>% 
+  pivot_wider(
+    names_from = "column name containing the values you want to spread to new columns",
+    names_sort = TRUE, # the default is FALSE to sort by first appearance
+    values_from = "values that will populate the cell values"
+  )
+```
+
+Since the `tidyr_long` object has 18 rows, we should expect to see 19 columns after we pivot wide, i.e., 1 column for the identifier (income) + 18 new columns created from pivoting wide (religion). Putting this code to practice, let's create a new object called `tidyr_wide` with the `pivot_wider()` function:
+
+```{r message=FALSE, echo=TRUE}
+tidyr_wide <- tidyr_long %>% 
+  pivot_wider(
+    names_from = religion,
+    names_sort = TRUE,
+    values_from = count 
+  )
+
+glimpse(tidyr_wide)
+```
+DECONSTRUCT THE CODE ABOVE:
+
+* The first argument, `names_from`, identifies the column from which we'll be spreading the values contained in it to new columns
+  * In our case, it’s the "religion" field
+* The `names_sort` argument is optional (defaults to `FALSE`) - by setting it to `TRUE`, we ensure the new columns spread wide are in alphabetical order vs the order of first appearance
+* The `values_from` argument supplies the column name with the values that we want to use to populate the values in our reshaped wide dataset
+
+# 14. ADVANCED PIVOTING
+
+Sometimes there is a need to pivot your data long _then_ wide to get your desired results. Sometimes there is a need to summarize the data using your own custom functions. Below, we'll aim to do the following:
+
+* Start with our original `tidyr_data` object and pivot it long using `pivot_longer()`
+* Pipe the results into a `pivot_wider()` function but using different criteria to spread the data wide
+* Unlike the `pivot_wider()` example in section 13, this time, we're going to use a fourth argument in the `pivot_wider()` function, `values_fn`
+  * With `values_fn`, we'll be able to replace the values in our resulting table with categorical buckets representing the sample size
+  * This argument can easily be populated with summary stats such as `values_fn = mean`, but we can also pass through custom functions
+  * The example below will pass through a custom function, `custom_sample_size_fn()`, that will replace the numeric cell values with categorical representations of sample size
+
+```{r message=FALSE, echo=TRUE}
+custom_sample_size_fn <- function(value) {
+    case_when(value < 50 ~ "S",
+              value < 250 ~ "M",
+              value < 750 ~ "L",
+              TRUE ~ "XL")
+}
+
+tidyr_wide2 <- tidyr_data %>% 
+  pivot_longer(
+    cols = !religion,
+    names_to = "income",
+    values_to = "count" 
+  ) %>% 
+  pivot_wider(
+    names_from = religion,
+    names_sort = TRUE,
+    values_from = count,
+    values_fn = ~ custom_sample_size_fn(.x)
+  )
+
+glimpse(tidyr_wide2)
+```
+DECONSTRUCT THE CODE ABOVE:
+
+* Write a custom `case_when()` function to bucket sample size counts into categorical buckets,
+* Pivot the original `tidyr_data` long,
+* Pivot the resulting table wide, and
+* Replace the numeric values with categorical buckets using the custom function
+
+# 15.  GGPLOT2  INTRO
+
+![](ggplot2.png){width=30%}
+
+**Initial Data Prep**  
+Before we begin our data visualization - let's do some data prep using the tools above.  First, create 2 new variables: "carat.group", and "table.group". Then we will create 4 aggregated datasets as follows:
+
+* group by carat.group  
+* group by carat.group and cut  
+* group by carat.group, cut, and color  
+* group by carat.group, cut, color, and table.group  
+
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+df.diamonds <- df.diamonds %>%
+  # Create new variable carat.group
+  mutate(carat.group = case_when(carat < 1 ~ 0.5,
+                                 carat < 2 ~ 1.5,
+                                 carat < 3 ~ 2.5,
+                                 carat < 4 ~ 3.5, 
+                                 TRUE ~ 4.5),
+         # create new variable table.group
+         table.group = case_when(table < 60 ~ 60,
+                                 table < 70 ~ 70,
+                                 TRUE ~ 95))
+
+# Create dataset for 1 variable visualizations
+df.agg1 <- df.diamonds %>%
+  group_by(carat.group) %>%
+  summarise(Total.Price = sum(price), Observations = n()) %>%
+  mutate(average.price = Total.Price/Observations)
+
+# Create dataset for 2 variable visualizations
+df.agg2 <- df.diamonds %>%
+  group_by(carat.group, cut) %>%
+  summarise(Total.Price = sum(price), Observations = n()) %>%
+  mutate(average.price = Total.Price/Observations)
+
+# Create dataset for 3 variable visualizations
+df.agg3 <- df.diamonds %>%
+  group_by(carat.group, cut, color) %>%
+  summarise(Total.Price = sum(price), Observations = n()) %>%
+  mutate(average.price = Total.Price/Observations)
+
+# Create datset for 4 variable visualizations
+df.agg4 <- df.diamonds %>%
+  group_by(carat.group, cut, color, table.group) %>%
+  summarise(Total.Price = sum(price), Observations = n()) %>%
+  mutate(average.price = Total.Price/Observations)
+
+```
+
+
+
+
+**Basic GGPLOT2 GRAPH:**  
+
+Graphs created with ggplot2 use the following form:  
+
+`ggplot(data,(aes(x,y)) + geom_XXXX()`
+
+DECONSTRUCT THE LINE ABOVE:  
+
+* There are 2 components:  ggplot object and geometry  
+* For this lesson, the ggplot object will always contain the 2 arguments listed: data and aesthetics.  
+* All the graphs we will look at today have an x and y aesthetic defined.  Sometimes additional aesthetics as well.  
+* Add the geometry using a plus sign - similarly to using the %>% with dplyr.  
+* Additional layers added with "+" as needed.  We will explore facets, labels and titles.  
+* Generic XXX in the line above determines your graph type:  
+* `geom_point()`:  scatter plot
+
+# 16.  1 VARIABLE VIEW
+
+Begin by creating your ggplot object as described above:  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+graph.object <- ggplot(df.agg1, aes(x = carat.group, y = average.price, group = 1))
+graph.object
+
+
+```
+
+* Note the additional aesthtetic "group = 1" which is necessary for the single explanatory variable graphs.  
+* X = explanatory variable (carat.group) ; Y = Target Variable (average.price)  
+* Next we add our geometries - and see how easy it is to iterate through several types of graphs with ggplot2.  
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+scatter1 <- graph.object + geom_point()
+line1 <- graph.object + geom_line() 
+bar1 <- graph.object + geom_bar(stat = "identity") 
+scatterline1 <- scatter1 + geom_line()
+
+
+```
+
+* Note the additional argument (stat = "identity") used for bar graphs with a single explanatory variable.  
+* We are creating 4 different graphs using different geometries on the same ggplot object.  
+* These 4 graphs represent the 3 geometries (bar, scatter, line) plus a graph that combines line and scatter.  
+* You can now view by simply calling any of these objects.  
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+scatter1
+
+```
+
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+bar1
+
+
+```
+
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+line1
+
+
+```
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+scatterline1
+
+
+```
+
+
+# 17. 2 VARIABLE VIEW
+
+As always with ggplot2 - our first step is to create our ggplot object.  
+
+* There are several ways we can add this additional variable.  
+* For this example we will use color and fill the aesthetic in the ggplot object.  
+* X = Explanatory Variable 1 ; Y = Target Variable ; Color = Fill = Explanatory Variable 2  
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+graph.task2 <- ggplot(df.agg2,aes(x = carat.group, y = average.price, color = cut, fill = cut))
+
+
+```
+
+Once we build our ggplot object, adding geometries is the same as in Task 1:
+
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+scatter2 <- graph.task2 + geom_point()
+line2 <- graph.task2 + geom_line()
+stackbar2 <- graph.task2 + geom_bar(stat = "identity",position = "stack")
+fillbar2 <- graph.task2 + geom_bar(stat = "identity",position = "fill")
+dodgebar2 <- graph.task2 + geom_bar(stat = "identity",position = "dodge")
+scatterline2 <- scatter2 + geom_line()
+
+
+```
+
+
+```{r}
+scatter2
+
+
+```
+
+
+```{r}
+line2
+
+
+```
+
+```{r}
+stackbar2
+
+
+```
+
+```{r}
+fillbar2
+
+
+```
+
+```{r}
+dodgebar2
+
+
+```
+
+```{r}
+scatterline2
+
+
+```
+
+
+# 18. 3+ VARIABLE VIEW  
+
+There is another powerful layer you can add to your graphs which allows you to analyze higher order dimensions (more variables).  This is called faceting.  Faceting means making copies of your graphs.  We are going to make a bunch of copies of the graphs we built up to now.  Each copy will represent a single level of our designated faceting variable(s).
+
+Once again - start with your ggplot object:  
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+
+graph.task3 <- ggplot(df.agg3,aes(x = carat.group, y = average.price, color = cut, fill = cut))
+
+
+
+```
+
+
+
+**facet_wrap()**  
+
+We will start with facet_wrap().  Facet_wrap() allows faceting (making copies of your graph) split by 1 variable.  
+
+Next - add our geometries like in previous tasks.  We also add an additional facet_wrap() layer to our ggplot object.  Adding the facet_wrap() layer to our graphs above simply results in several copies of your prior graphs, each one filtered on a single level of your faceting variable.   
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+scatterline3 <- graph.task3 + geom_line() + geom_point() + facet_wrap(~color)
+scatterline3
+
+
+```
+
+
+**facet_grid()**  
+
+Facet_grid() is very similar to facet_wrap().  Where facet_wrap() allows you to facet on one variable, facet_grid() allows you to facet on 2 variables.  One variable for the columns, and one for the rows.
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+
+graph.task4 <- ggplot(df.agg4,aes(x = carat.group, y = average.price, color = cut, fill =cut))
+
+
+```
+
+```{r message=FALSE, echo=TRUE, fig.align='center', warning=FALSE}
+
+scatterline4 <- graph.task4 + geom_line() + geom_point() + facet_grid(color ~ table.group) + xlab("Banded Ages") + ylab("Actual to Expected") + ggtitle("Dollar Weighted Actual to Expected Analysis Using 7580E")
+
+scatterline4
+
+
+```
+
+# 19. Plotly  
+
+Plotly is a wrapper you can put around your ggplot graphs.  This wrapper greatly enhances ggplot graphs and is extremely simple to implement.  For these reasons - I use it as a default with all my graphs.  
+
+In order to use plotly, simply add the ggplotly() function around any of the graph objects we have already created.  This will create cleaner graphs as well as additional interactivity:  
+
+
+```{r}
+ggplotly(scatter1)
+ggplotly(scatter2)
+ggplotly(bar1)
+ggplotly(stackbar2)
+ggplotly(fillbar2)
+ggplotly(dodgebar2)
+ggplotly(line1)
+ggplotly(line2)
+ggplotly(scatterline1)
+ggplotly(scatterline2)
+ggplotly(scatterline3)
+ggplotly(scatterline4)
+
+```
+
