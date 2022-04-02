@@ -72,8 +72,9 @@ This event is open to data scientists, enthusiasts and hackers of all levels, fr
 | :--- | :--   |
 | 08:30 AM - 09:00 AM | Doors open | 
 | 09:00 AM – 12:00 PM | Working session |
-| 12:00 PM – 12:45 PM | Lunch  |
-| 12:45 PM – 01:30 PM | Practice presentations |
+| 12:30 PM            | Presentation submission deadline | 
+| 12:00 PM – 12:30 PM | Lunch  |
+| 12:30 PM – 01:30 PM | Practice presentations |
 | 01:30 PM – 03:00 PM | Group presentations |
 | 03:00 PM – 03:30 PM | Judges deliberate; Complete event survey |
 | 03:30 PM – 04:00 PM | Award presentation & wrap-up |
