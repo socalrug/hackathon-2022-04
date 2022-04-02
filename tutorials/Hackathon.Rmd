@@ -485,7 +485,7 @@ tidyr_wide2 <- tidyr_data %>%
     names_from = religion,
     names_sort = TRUE,
     values_from = count,
-    values_fn = ~ custom_sample_size_fn(.x)
+    values_fn = custom_sample_size_fn
   )
 
 glimpse(tidyr_wide2)
