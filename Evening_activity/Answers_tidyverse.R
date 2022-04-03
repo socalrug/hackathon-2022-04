@@ -6,7 +6,7 @@ library(janitor)
 
 
 
-DF <- read_csv("Global_Superstore2.csv")
+DF <- read_csv("Evening_activity/Global_Superstore2.csv")
 DF <- janitor::clean_names(DF)  #use the janitor package to convert variable names to lower case and snake case 
 glimpse(DF)
 
@@ -19,18 +19,15 @@ DF <- DF %>%
   mutate(order_year = lubridate::year(order_date))  # create a new colum with Year from order_date
 
 DF1 <- DF %>% 
-  group_by(order_year) %>% 
-  slice_max(profit) %>% 
-  select(segment, order_year, profit)
-
-DF1
+  group_by(order_year, segment) %>%
+  summarise(tot_profit = sum(profit)) 
 
 # Answer:
-#   segment   order_year profit
-# 1 Consumer        2011  4630.
-# 2 Consumer        2012  3177.
-# 3 Corporate       2013  8400.
-# 4 Consumer        2014  6720.
+#   segment   order_year
+# 1 Consumer        2011
+# 2 Consumer        2012
+# 3 Consumer        2013
+# 4 Consumer        2014
 
 
 # Which country has the second highest total sales in 2011?

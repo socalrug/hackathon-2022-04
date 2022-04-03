@@ -3,7 +3,7 @@ library(data.table)
 library(lubridate)
 library(janitor)
 
-DT <- data.table::fread("Global_Superstore2.csv") # Read in the data
+DT <- data.table::fread("Evening_activity/Global_Superstore2.csv") # Read in the data
 
 DT <- janitor::clean_names(DT)  #use the janitor package to convert variable names to lower case and snake case 
 
@@ -15,17 +15,20 @@ str(DT)
 DT[, order_date := lubridate::dmy(order_date)]  # Convert order_date from character to date
 DT[, order_year := lubridate::year(order_date)]  # create a new colum with Year from order_date
 
-DT1 <- DT[, .SD[which.max(profit)], by = order_year][
-  ,.(order_year, segment, profit)][
-    order(order_year),]
+DT[, tot_profit := sum(profit), by = .(order_year, segment)] 
+
+
+DT1 <- DT[, .SD[which.max(tot_profit)], by = .(order_year,segment)][
+  ,.(order_year, segment, tot_profit)][
+    order(order_year,-tot_profit),]
 DT1
 
 # Answer:
-#   order_year   segment   profit
-# 1:       2011  Consumer 4630.475
-# 2:       2012  Consumer 3177.475
-# 3:       2013 Corporate 8399.976
-# 4:       2014  Consumer 6719.981
+#   order_year   segment   
+# 1:       2011  Consumer 
+# 2:       2012  Consumer 
+# 3:       2013  Consumer 
+# 4:       2014  Consumer 
 
 
 # Which country has the second highest total sales in 2011?
