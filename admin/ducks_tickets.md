@@ -2,7 +2,7 @@
 
 | Given Name | Family Name | Email | Game Date |
 | :--        | :--         | :--   | :--       |
-| Michelle   | Ng          | michelleng95@gmail.com | |
+| Chloe      | Ko          | peihk@uci.edu | |
 | Pablo      | Barajas     | barajap1@uci.edu | |
 | Mohamed    | Abdelhamid  | Mohamed.Abdelhamid@csulb.edu | Apr 24 |
 |            |             |                  | |
