@@ -4,7 +4,7 @@
 | :--        | :--         | :--   | :--       |
 | Michelle   | Ng          | michelleng95@gmail.com | |
 | Pablo      | Barajas     | barajap1@uci.edu | |
-| Mohamed    | Abdelhamid  | Mohamed.Abdelhamid@csulb.edu | |
+| Mohamed    | Abdelhamid  | Mohamed.Abdelhamid@csulb.edu | Apr 24 |
 |            |             |                  | |
 |            |             |                  | |
 
