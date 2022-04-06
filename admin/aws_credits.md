@@ -2,5 +2,5 @@
 
 | Given Name | Family Name | Email |
 | :--        | :--         | :--   |
-|Monica      | Venturini   | monicavent18@gmail.com |
-
+| Monica     | Venturini   | monicavent18@gmail.com |
+| Tommy      | Steed       | tommysteed5@gmail.com  |
