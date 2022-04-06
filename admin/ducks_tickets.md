@@ -3,7 +3,7 @@
 | Given Name | Family Name | Email | Game Date |
 | :--        | :--         | :--   | :--       |
 | Chloe      | Ko          | peihk@uci.edu | |
-| Pablo      | Barajas     | barajap1@uci.edu | |
+| Pablo      | Barajas     | barajap1@uci.edu | April 17 or April 24|
 | Mohamed    | Abdelhamid  | Mohamed.Abdelhamid@csulb.edu | Apr 24 |
 |            |             |                  | |
 |            |             |                  | |
