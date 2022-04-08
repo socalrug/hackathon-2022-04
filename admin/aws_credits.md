@@ -2,9 +2,9 @@
 
 | Given Name | Family Name | Email |
 | :--        | :--         | :--   |
-| Monica     | Venturini   | monicavent18@gmail.com |
-| Tommy      | Steed       | tommysteed5@gmail.com  |
-| Sammi      | Chueh       | chungenc@uci.edu       |
-|            |             |                        |
-|            |             |                        |
+| Monica     | Venturini   | monicavent18@gmail.com      |
+| Tommy      | Steed       | tommysteed5@gmail.com       |
+| Sammi      | Chueh       | chungenc@uci.edu            |
+| Mandy      | Huang       | mingyuanhuang0801@gmail.com |
+|            |             |                             |
 
