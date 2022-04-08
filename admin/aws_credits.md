@@ -4,3 +4,7 @@
 | :--        | :--         | :--   |
 | Monica     | Venturini   | monicavent18@gmail.com |
 | Tommy      | Steed       | tommysteed5@gmail.com  |
+| Sammi      | Chueh       | chungenc@uci.edu       |
+|            |             |                        |
+|            |             |                        |
+
