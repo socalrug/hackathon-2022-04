@@ -21,7 +21,7 @@ DT[, tot_profit := sum(profit), by = .(order_year, segment)]
 DT1 <- DT[, .SD[which.max(tot_profit)], by = .(order_year,segment)][
   ,.(order_year, segment, tot_profit)][
     order(order_year,-tot_profit),]
-DT1
+DT1[, .SD[1], by = order_year]
 
 # Answer:
 #   order_year   segment   
