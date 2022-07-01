@@ -6,5 +6,5 @@
 | Monica     | Venturini   | monicavent18@gmail.com      |
 | Sammi      | Chueh       | chungenc@uci.edu            |
 | Tommy      | Steed       | tommysteed5@gmail.com       |
-|            |             |                             |
+| Sakshi     | Mehta       | sakshm1@uci.edu             |
 
